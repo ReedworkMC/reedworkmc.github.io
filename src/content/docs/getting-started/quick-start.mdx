@@ -1,0 +1,94 @@
+---
+title: Quick Start
+description: Build your first PaperMC plugin with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+import {getExample} from '@lib/github';
+export const commandCode = await getExample('CommandExample/src/main/java/dev/reedworkmc/examples/command/commands/HelloReedworkCommand.java',);
+export const dependencyInjectionCode = await getExample('DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/commands/ReedworkCommand.java',);
+export const greeterServiceCode = await getExample('DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/GreeterService.java',);
+
+# Quick Start
+
+This guide walks you through creating your first PaperMC plugin with Reedwork.
+
+By the end, you will have a plugin with:
+
+- automatic component discovery
+- dependency injection
+- annotation-based commands
+- automatic command registration
+
+## 1. Create your plugin
+
+Start with a regular Paper plugin and add Reedwork as described in the [Installation](../installation/) guide.
+
+Your main plugin class only needs to initialize Reedwork and tell it which package to scan.
+
+<Code title="MyFirstReedworkPlugin.java" lang="java" code={`
+package dev.reedworkmc.example;
+
+import dev.reedworkmc.reedwork.Reedwork;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class MyFirstReedworkPlugin extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        Reedwork.create(this).scan("dev.reedworkmc.example");
+    }
+}
+`}
+/>
+
+The `scan` call tells Reedwork where to look for your plugin components.
+
+Reedwork can then discover supported components such as commands, listeners, and services automatically.
+
+## 2. Create a command
+
+Commands can be declared using annotations instead of manually registering
+them with Bukkit or Paper.
+
+<Code title="HelloReedworkCommand.java" lang="java" code={commandCode} />
+
+The command is discovered and registered automatically when Reedwork scans
+your plugin package.
+
+The `@Command` annotation defines the command itself.
+The `@CommandHandler` annotation marks the default command handler that is triggered when no arguments are provided.
+The `@SubCommand` annotation can be used to define additional command paths and commands with arguments.
+
+## 3. Add a service with dependency injection
+
+Reedwork can resolve constructor dependencies automatically.
+
+<Code title="ReedworkCommand.java" lang="java" code={dependencyInjectionCode} />
+
+The command declares its dependency through its constructor.
+
+Reedwork resolves the required component and provides it automatically.
+
+For example, the command can depend on a service:
+
+<Code title="GreeterService.java" lang="java" code={greeterServiceCode} />
+
+No service locator and no manual dependency wiring are required.
+
+## Explore Reedwork's features
+
+The example repository contains complete, independently runnable examples
+for Reedwork's major features:
+
+- [Commands](../features/commands)
+- [Dependency Injection](../features/dependency-injection)
+- [Events](../features/events)
+- [Enchantments](../features/enchantments)
+- [Utilities](../features/utilities)
+
+Each feature guide uses the corresponding example from the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
+
+## What's next?
+
+Now that you understand the basic Reedwork workflow, continue with the individual feature guides to learn how each system works in detail.

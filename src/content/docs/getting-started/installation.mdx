@@ -1,0 +1,63 @@
+---
+title: Installation
+description: Learn how to install Reedwork in your PaperMC plugin.
+---
+
+import { FileTree, Code } from '@astrojs/starlight/components';
+import { getLatestReedworkRelease } from '@lib/reedwork-release';
+
+export const release = await getLatestReedworkRelease();
+export const { version, downloadUrl, jarName } = release;
+
+Reedwork is distributed as a JAR through GitHub Releases.
+
+## Download
+
+The latest release is **{version}**.
+
+<a href={downloadUrl}>Download {jarName}</a> or visit the [GitHub Releases](https://github.com/ReedworkMC/Reedwork/releases/latest) page.
+
+Place the downloaded JAR in the `libs` directory of your plugin project:
+
+<FileTree>
+    - my-plugin
+        - libs
+            - {jarName}
+        - src
+            - ...
+        - ...
+</FileTree>
+
+## Maven
+
+If you are using Maven, add Reedwork as a local dependency to your `pom.xml`:
+
+<Code lang="xml" code={`
+<dependency>
+    <groupId>dev.reedworkmc</groupId>
+    <artifactId>reedwork</artifactId>
+    <version>${version}</version>
+    <scope>system</scope>
+    <systemPath>\${project.basedir}/libs/${jarName}</systemPath>
+</dependency>`}
+/>
+
+The JAR must be located at <code>libs/{jarName}</code> relative to your project root.
+
+## Gradle
+
+For Gradle projects, add the Reedwork JAR as a local dependency in your `build.gradle`:
+
+<Code lang="groovy" code={`
+dependencies {
+    implementation(files("libs/${jarName}"))
+}`}
+/>
+
+The JAR must be located at <code>libs/{jarName}</code> relative to your project root.
+
+## Next Steps
+
+Reedwork is now available as a dependency in your project.
+
+Continue with the [Quick Start](/getting-started/quick-start/) to create your first Reedwork-powered Paper plugin.
