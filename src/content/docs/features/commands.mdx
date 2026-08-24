@@ -1,0 +1,537 @@
+---
+title: Commands
+description: Build Paper Brigadier commands from Java classes, annotations, and method parameters.
+---
+
+import {Aside, Code} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github";
+
+export const commandCode = await getExample("CommandExample/src/main/java/dev/reedworkmc/examples/command/commands/HelloReedworkCommand.java");
+export const pluginCode = await getExample("CommandExample/src/main/java/dev/reedworkmc/examples/command/CommandExample.java");
+
+# Commands
+
+Reedwork turns ordinary Java classes and method signatures into fully registered Paper Brigadier commands.
+
+Instead of manually constructing command nodes, argument types, suggestions, parsers, permissions, and registration logic, you describe the command in Java and Reedwork builds the corresponding command tree for you.
+
+The most important concept is simple:
+
+**The Java type of a method parameter determines how Reedwork maps that parameter to a Paper Brigadier argument.**
+
+This means your command implementation works with already-resolved Java values instead of raw command input.
+
+## A complete command
+
+The following example defines a command with a default handler and a subcommand that accepts a player argument:
+
+<Code title="HelloReedworkCommand.java" lang="java" code={commandCode}/>
+
+From this single class, Reedwork creates a command structure equivalent to:
+
+```text
+/helloreedwork
+/helloreedwork <target>
+/hellorw
+/hrw
+```
+
+The `Player target` parameter tells Reedwork that `<target>` is a player argument.
+
+No manual Brigadier argument node is required.
+
+No manual player selector parsing is required.
+
+No manual argument conversion is required.
+
+## Command Declaration
+
+The `@Command` annotation defines the root command and its metadata.
+
+| Attribute     | Description                                |
+| ------------- | ------------------------------------------ |
+| `value`       | The command name.                          |
+| `description` | Description associated with the command.   |
+| `permission`  | Permission required to access the command. |
+| `cooldown`    | Command cooldown in seconds.               |
+| `aliases`     | Alternative names for the command.         |
+
+For example:
+
+```java
+@Command(
+    value = "helloreedwork",
+    description = "Send a welcome message to a player",
+    permission = "reedwork.example.hello",
+    cooldown = 10,
+    aliases = {"hellorw", "hrw"}
+)
+```
+
+This produces the root command and its aliases:
+
+```text
+/helloreedwork
+/hellorw
+/hrw
+```
+
+The command itself is only the root of the generated command tree. Execution paths are defined by command handlers and subcommands.
+
+## Command handlers
+
+A command path is executed by a method annotated with `@CommandHandler`:
+
+```java
+@CommandHandler
+public boolean greetSelf(CommandContext context) {
+    context.player().sendMessage(HELLO_MESSAGE);
+    return true;
+}
+```
+
+A `@CommandHandler` represents the default execution path of the command.
+
+For the example above:
+
+```text
+/helloreedwork
+```
+
+is handled by `greetSelf`.
+
+The handler can receive a `CommandContext`, which provides information about the current command execution.
+
+A handler returning `true` reports successful command execution.
+
+A command can have a default handler while also exposing additional subcommands.
+
+## Subcommands
+
+Additional command paths are declared with `@SubCommand`.
+
+```java
+@SubCommand("<target>")
+public boolean greetTarget(CommandContext context, Player target) {
+    target.sendMessage(HELLO_MESSAGE);
+
+    context.player().sendMessage(
+        "Hello message sent to " + target.getName()
+    );
+
+    return true;
+}
+```
+
+This creates:
+
+```text
+/helloreedwork <target>
+```
+
+The value of `@SubCommand` describes the command path relative to its parent command.
+
+### Argument names
+
+The text inside angle brackets is the argument name displayed by Minecraft's command system.
+
+For example:
+
+```text
+<target>
+```
+
+tells the player what kind of value is expected.
+
+The name itself does **not** determine the Java type.
+
+The Java method parameter does:
+
+```java
+@SubCommand("<target>")
+public boolean greetTarget(CommandContext context, Player target) {
+    // ...
+}
+```
+
+Here, `<target>` becomes a Paper player argument because the corresponding Java parameter is `Player target`.
+
+This separation is important:
+
+- `@SubCommand` describes the command structure and argument names.
+- The Java parameter type determines how the argument is parsed.
+- Reedwork connects both automatically.
+
+### Multiple arguments
+
+Subcommands are not limited to a single argument.
+
+A command path can contain multiple arguments as well as literal command components:
+
+```java
+@SubCommand("give <player> <item> with <name> <amount>")
+public boolean give(
+    CommandContext context,
+    Player player,
+    ItemStack item,
+    String name,
+    Integer amount
+) {
+    // ...
+}
+```
+
+This describes the command:
+
+```text
+/give <player> <item> with <name> <amount>
+```
+
+The literal `with` becomes part of the command path, while the parameters are mapped to their corresponding argument types.
+
+## Automatic parameter mapping
+
+This is one of the core features of Reedwork.
+
+**Method parameters are mapped directly to Paper Brigadier argument types.**
+
+For example:
+
+```java
+@SubCommand("give <player> <item> with <name> <amount>")
+public boolean give(
+    CommandContext context,
+    Player player,
+    ItemStack item,
+    String name,
+    Integer amount
+) {
+    // ...
+}
+```
+
+Reedwork sees:
+
+| Java parameter   | Generated argument  |
+| ---------------- | ------------------- |
+| `Player player`  | Player argument     |
+| `ItemStack item` | Item Stack argument |
+| `String name`    | String argument     |
+| `Integer amount` | Integer argument    |
+
+The resulting command path is:
+
+```text
+/give <player> <item> with <name> <amount>
+```
+
+When the command executes, the handler receives the already-resolved Java values.
+
+There is no need to manually:
+
+- construct Brigadier argument nodes;
+- parse command arguments;
+- convert parsed values;
+- resolve player or entity selectors;
+- perform basic type validation.
+
+Reedwork handles the Brigadier machinery between the command input and your Java method.
+
+## Supported parameter types
+
+Reedwork provides automatic parameter resolvers for a large portion of [Paper's Minecraft-specific Brigadier argument types](https://docs.papermc.io/paper/dev/command-api/arguments/minecraft/).
+
+The resolver registry currently covers the following categories.
+
+### Primitive and value types
+
+| Java type        | Paper argument | Description                  |
+| ---------------- | -------------- | ---------------------------- |
+| `Boolean`        | Boolean        | Boolean values.              |
+| `Double`         | Double         | Decimal numbers.             |
+| `Float`          | Float          | Floating-point numbers.      |
+| `Integer`        | Integer        | Integer values.              |
+| `Long`           | Long           | Long integer values.         |
+| `String`         | String         | String command arguments.    |
+| `UUID`           | UUID           | UUID values.                 |
+
+#### Bukkit/Paper types
+
+| Java type            | Paper argument          | Description                             |
+| -------------------- | ----------------------- | --------------------------------------- |
+| `Player`             | Player                  | Resolves a player selector.             |
+| `Entity`             | Entity                  | Resolves an entity selector.            |
+| `World`              | World                   | Resolves a world.                       |
+| `GameMode`           | Game Mode               | Resolves a Minecraft game mode.         |
+| `HeightMap`          | Height Map              | Resolves a height map.                  |
+| `DisplaySlot`        | Scoreboard Display Slot | Resolves a scoreboard display slot.     |
+| `ItemStack`          | Item Stack              | Resolves an item stack argument.        |
+| `ItemStackPredicate` | Item Predicate          | Resolves an item predicate.             |
+| `Criteria`           | Objective Criteria      | Resolves scoreboard objective criteria. |
+| `LookAnchor`         | Entity Anchor           | Resolves an entity look anchor.         |
+| `Component`          | Component               | Adventure components.                   |
+| `Style`              | Style                   | Adventure text styles.                  |
+| `NamedTextColor`     | Named Color             | Adventure named text colors.            |
+| `Key`                | Key                     | Adventure keys.                         |
+| `NamespacedKey`      | Namespaced Key          | Bukkit namespaced keys.                 |
+| `HexColor`           | Hex Color               | Hexadecimal colors.                     |
+| `BlockState`         | Block State             | Resolves a block state.                 |
+| `BlockPosition`      | Block Position          | Resolves a block position.              |
+| `FinePosition`       | Fine Position           | Resolves a precise world position.      |
+| `IntegerRange`       | Integer Range           | Resolves an integer range.              |
+| `DoubleRange`        | Double Range            | Resolves a double range.                |
+
+
+#### Collections
+
+| Java type             | Paper argument          | Description                             |
+| --------------------- | ----------------------- | --------------------------------------- |
+| `List<Player>`        | Players                 | Resolves multiple players.              |
+| `List<Entity>`        | Entities                | Resolves multiple entities.             |
+| `List<PlayerProfile>` | Player Profiles         | Resolves player profiles.               |
+
+### Additional Minecraft arguments
+
+Paper exposes several additional Minecraft-specific Brigadier argument types.
+
+Reedwork's resolver system is designed to cover these types directly where a corresponding Java representation is available.
+
+Currently unsupported Paper argument types include:
+
+- `resource(RegistryKey)`
+- `resourceKey(RegistryKey)`
+- `signedMessage()`
+- `time(int)`
+- `templateMirror()`
+- `templateRotation()`
+
+These are intentionally listed separately because Reedwork's goal is not merely to provide a small set of common argument converters, but to map as much of Paper's Brigadier API as possible into ordinary Java method signatures.
+
+## String arguments
+
+`String` parameters receive special treatment depending on their position in the command.
+
+A String parameter followed by another command argument consumes a single argument.
+
+For example:
+
+```text
+/foo <name> <amount>
+```
+
+with:
+
+```java
+String name,
+Integer amount
+```
+
+creates a normal String argument for `name`.
+
+The String is **not greedy** because another command argument follows it.
+
+### Greedy strings
+
+If the String parameter is the final argument of the command, Reedwork treats it as a greedy string.
+
+For example:
+
+```text
+/announce <message>
+```
+
+with:
+
+```java
+String message
+```
+
+causes `message` to consume the remainder of the command input.
+
+This allows commands such as:
+
+```text
+/announce Hello everyone, welcome to the server!
+```
+
+without manually selecting Brigadier's greedy-string argument type.
+
+This positional behavior makes it possible to combine structured arguments with free-form text naturally.
+
+## Custom suggestions
+
+Parameter parsing and command suggestions are separate concepts.
+
+The Java parameter type determines **how the argument is parsed**.
+
+The `@Suggest` annotation determines **how values are suggested to the player**.
+
+This allows Reedwork to combine automatic parameter mapping with application-specific completion logic.
+
+For example, a simple suggestion provider can read available values from an application service:
+
+```java
+@Transient
+public final class PetSuggestionProvider
+        implements SuggestionProvider<CommandSourceStack> {
+
+    private final PetIndex petIndex;
+
+    public PetSuggestionProvider(PetIndex petIndex) {
+        this.petIndex = petIndex;
+    }
+
+    @Override
+    public CompletableFuture<Suggestions> getSuggestions(
+            CommandContext<CommandSourceStack> context,
+            SuggestionsBuilder builder
+    ) {
+        petIndex.getPetTypes()
+                .forEach(builder::suggest);
+
+        return builder.buildFuture();
+    }
+}
+```
+
+The provider can then be attached directly to a command parameter:
+
+```java
+@SubCommand("<petType> <owner>")
+public boolean onCommand(
+        CommandContext context,
+        @Suggest(PetSuggestionProvider.class) String petType,
+        Player owner
+) {
+    handleCommand(context.sender(), petType, owner);
+    return true;
+}
+```
+
+The resulting command can be used as:
+
+```text
+/pet <petType> <owner>
+```
+
+The `petType` parameter remains a normal String argument, but Minecraft receives custom suggestions from `PetSuggestionProvider`.
+
+The `owner` parameter is independently mapped to a Paper player argument because its Java type is `Player`.
+
+This gives Reedwork three separate layers:
+
+| Layer               | Responsibility                                     |
+| ------------------- | -------------------------------------------------- |
+| `@SubCommand`       | Defines the command structure.                     |
+| Java parameter type | Determines the argument parser and resolved value. |
+| `@Suggest`          | Provides custom command completion.                |
+
+The suggestion provider itself can also use Reedwork's dependency injection system.
+
+This means custom command completion does not require global state or manually constructed service objects.
+
+## Command metadata
+
+Command metadata is declared directly on the command annotation.
+
+### Permissions
+
+Commands can define a Bukkit/Paper permission:
+
+```java
+@Command(
+    value = "helloreedwork",
+    permission = "reedwork.example.hello"
+)
+```
+
+If the sender does not have the required permission, the command is not available to that sender.
+
+<Aside>
+    Reedwork integrates with Paper's permission system when constructing the command tree.
+</Aside>
+
+<Aside type="caution">
+    Being an operator does not automatically grant access when the required permission is not granted.
+</Aside>
+
+### Cooldowns
+
+Commands can define a cooldown directly in their declaration:
+
+```java
+@Command(
+    value = "helloreedwork",
+    cooldown = 10
+)
+```
+<Aside>
+The cooldown value is specified in seconds.
+</Aside>
+
+Reedwork handles the cooldown instead of requiring every command implementation to maintain its own cooldown state.
+
+### Aliases
+
+Alternative command names can be declared with `aliases`:
+
+```java
+@Command(
+    value = "helloreedwork",
+    aliases = {"hellorw", "hrw"}
+)
+```
+
+The command can then be invoked using:
+
+```text
+/helloreedwork
+/hellorw
+/hrw
+```
+
+## Automatic registration
+
+Commands do not need to be registered manually with Bukkit or Paper.
+
+The plugin only needs to initialize Reedwork and scan the package containing its components.
+
+<Code title="CommandExample.java" lang="java" code={pluginCode}/>
+
+The `scan` call discovers the command and registers it automatically.
+
+This also means that adding another command does not require additional registration code in the plugin's main class.
+
+## The Reedwork approach
+
+A relatively small Java class can describe:
+
+- the command structure
+- command metadata
+- permissions
+- aliases
+- cooldowns
+- Brigadier argument types
+- argument parsing
+- argument conversion
+- custom suggestions
+- execution handlers
+
+Reedwork then turns that declaration into the corresponding Paper command tree.
+
+You write the **command API your plugin needs**.
+
+Reedwork handles the **Brigadier machinery underneath it**.
+
+This is the central idea behind Reedwork's command system: instead of writing Brigadier infrastructure, you describe the command in the same Java types that your application actually works with.
+
+## Next steps
+
+Now that you understand Reedwork's command system, explore the systems that integrate with it:
+
+- [Dependency Injection](../dependency-injection/)
+- [Events](../events/)
+- [Enchantments](../enchantments/)
+- [Utilities](../utilities/)
+
+The complete runnable command example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
