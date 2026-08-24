@@ -1,0 +1,145 @@
+---
+title: Enchantments
+description: Define and automatically register custom Minecraft enchantments with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github";
+
+export const enchantmentCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/ReedworkEnchantment.java");
+export const bootstrapCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/EnchantmentExampleBootstrap.java");
+
+# Enchantments
+
+Reedwork lets you define custom Minecraft enchantments as regular Java classes.
+
+Instead of manually constructing registry entries, Reedwork discovers `CustomEnchantment` implementations and registers them during Paper's bootstrap phase.
+
+The system has three simple parts:
+
+- `@Enchantment` defines the enchantment's identity.
+- `CustomEnchantment` defines its properties.
+- `Reedwork.bootstrap(...).scan(...)` discovers and registers it.
+
+## Defining an enchantment
+
+The complete enchantment is defined by a single Java class.
+
+The `@Enchantment` annotation defines the enchantment key:
+
+<Code lang="java" mark="@Enchantment" code={`
+@Enchantment("reedworkpower")
+public final class ReedworkEnchantment implements CustomEnchantment {
+    // ...
+}`} />
+
+The annotation identifies the enchantment for Reedwork.
+
+The implementation of `CustomEnchantment` then provides the properties required for the generated Minecraft enchantment.
+
+## Enchantment properties
+
+`CustomEnchantment` provides the configuration used to create the enchantment registry entry.
+
+| Method | Description |
+| --- | --- |
+| `description()` | Defines the enchantment description. |
+| `supportedItems()` | Defines which item types support the enchantment. |
+| `anvilCost()` | Defines the anvil cost. |
+| `maxLevel()` | Defines the maximum enchantment level. |
+| `weight()` | Defines the enchantment weight. |
+| `minimumCost()` | Defines the minimum enchantment cost. |
+| `maximumCost()` | Defines the maximum enchantment cost. |
+| `activeSlots()` | Defines the equipment slots in which the enchantment is active. |
+
+For example, the example enchantment is restricted to the `DIRT` item tag:
+
+<Code lang="java" mark="supportedItems" code={`
+@Override
+public TagKey<ItemType> supportedItems() {
+    return ItemTypeTagKeys.DIRT;
+}`} />
+
+Its maximum level is defined by `maxLevel()`:
+
+<Code lang="java" mark="maxLevel" code={`
+@Override
+public int maxLevel() {
+    return 1;
+}`} />
+
+And `activeSlots()` determines where the enchantment is active:
+
+<Code lang="java" mark="activeSlots" code={`
+@Override
+public EquipmentSlotGroup activeSlots() {
+    return EquipmentSlotGroup.ANY;
+}`} />
+
+The remaining methods work the same way: Reedwork takes the values returned by the implementation and uses them when constructing the corresponding Paper enchantment registry entry.
+
+## Bootstrap registration
+
+Custom enchantments are registry-backed Minecraft data and therefore need to be created during Paper's bootstrap lifecycle.
+
+The example uses a `PluginBootstrap`:
+
+<Code title="EnchantmentExampleBootstrap.java" lang="java" code={bootstrapCode}/>
+
+The important part is the Reedwork bootstrap scan:
+
+<Code lang="java" mark="Reedwork.bootstrap" code={`
+@Override
+public void bootstrap(final BootstrapContext context) {
+    Reedwork.bootstrap(context)
+        .scan("dev.reedworkmc.examples.enchantment");
+}`} />
+
+`Reedwork.bootstrap(context)` initializes Reedwork for the Paper bootstrap environment.
+
+The `scan` call discovers the `@Enchantment` component and registers it with the Minecraft registry.
+
+No manual registry construction or registration is required.
+
+## Plugin configuration
+
+Because the enchantment is registered during Paper's bootstrap phase, the plugin declares its bootstrapper in `paper-plugin.yml`:
+
+<Code lang="yaml" mark="bootstrapper" code={`
+name: EnchantmentExample
+version: '\${version}'
+
+main: dev.reedworkmc.examples.enchantment.EnchantmentExample
+bootstrapper: dev.reedworkmc.examples.enchantment.EnchantmentExampleBootstrap
+api-version: '26.2'
+load: POSTWORLD
+`} />
+
+The `bootstrapper` entry points to the class implementing `PluginBootstrap`.
+
+This allows Paper to invoke `EnchantmentExampleBootstrap` during the bootstrap phase, before the normal plugin lifecycle begins.
+
+## The result
+
+The enchantment itself remains a regular Java class:
+
+<Code title="ReedworkEnchantment.java" lang="java" code={enchantmentCode}/>
+
+The bootstrapper only needs to initialize Reedwork and scan the appropriate package.
+
+Reedwork handles the discovery and registry integration.
+
+You define the **enchantment**.
+
+Reedwork handles the **Minecraft registry machinery**.
+
+## Next steps
+
+Now that you understand Reedwork's registry-backed enchantments, explore the other systems:
+
+- [Commands](../commands/)
+- [Dependency Injection](../dependency-injection/)
+- [Events](../events/)
+- [Utilities](../utilities/)
+
+The complete runnable enchantment example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
