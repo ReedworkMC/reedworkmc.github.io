@@ -17,49 +17,50 @@ hero:
 ---
 
 import {CardGrid, Steps} from '@astrojs/starlight/components';
-import AstroIconCard from '../../components/AstroIconCard.astro';
-import Footer from '../../components/Footer.astro';
+import AstroIconLinkCard from '@components/AstroIconLinkCard.astro';
+import Footer from '@components/Footer.astro';
 
 ## Everything you need to build with less boilerplate
 
 Reedwork handles the repetitive parts of Paper plugin development, so you can focus on building the features that make your plugin unique.
 
 <CardGrid stagger>
-    <AstroIconCard title="Dependency Injection" icon="mdi:needle">
+
+    <AstroIconLinkCard title="Dependency Injection" href="../features/dependency-injection" icon="mdi:needle">
         Automatically discover and inject dependencies into commands, listeners, services, and other plugin components.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Annotation-Based Commands" icon="mdi:console-line">
+    <AstroIconLinkCard title="Annotation-Based Commands" href="../features/commands" icon="mdi:console-line">
         Define commands and subcommands with annotations instead of repetitive registration code.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Automatic Events" icon="mdi:event-search">
+    <AstroIconLinkCard title="Automatic Events" href="../features/events" icon="mdi:event-search">
         Discover and register Bukkit and Paper event listeners automatically.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Custom Enchantments" icon="mdi:stars">
+    <AstroIconLinkCard title="Custom Enchantments" href="../features/enchantments" icon="mdi:stars">
         Define and automatically register custom enchantments using Paper's experimental enchantment features.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Brigadier Integration" icon="mdi:lightning-bolt">
+    <AstroIconLinkCard title="Brigadier Integration" href="../features/commands" icon="mdi:lightning-bolt">
         Leverage Paper's Brigadier command system for parsing, validation, execution, and native suggestions.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Automatic Parameter Resolution" icon="mdi:cached">
+    <AstroIconLinkCard title="Automatic Parameter Resolution" href="../features/commands#supported-parameter-types" icon="mdi:cached">
         Parameters are resolved from their declared Java types, reducing manual parsing and conversion code.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Permission Support" icon="mdi:protected">
+    <AstroIconLinkCard title="Permission Support" href="../features/commands#permissions" icon="mdi:protected">
         Protect commands with Bukkit and Paper's permission system.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Automatic Usage Generation" icon="mdi:account-help">
+    <AstroIconLinkCard title="Automatic Usage Generation" href="../features/commands#usage" icon="mdi:account-help">
         Keep generated command usage consistent with your command structure.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 
-    <AstroIconCard title="Developer Utilities" icon="mdi:help-outline">
+    <AstroIconLinkCard title="Developer Utilities" href="../features/utilities" icon="mdi:help-outline">
         Reusable utilities for common Bukkit and Paper development tasks.
-    </AstroIconCard>
+    </AstroIconLinkCard>
 </CardGrid>
 
 ## See Reedwork in action
