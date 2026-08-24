@@ -1,0 +1,118 @@
+---
+title: BedrockUtils
+description: Detect Bedrock players through Floodgate with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+
+# BedrockUtils
+
+`BedrockUtils` provides a simple way to detect whether a player joined through Geyser/Floodgate.
+
+Instead of interacting with the Floodgate API directly, plugins can use a single utility method:
+
+<Code lang="java" code={`
+if (BedrockUtils.isBedrockPlayer(player)) {
+    // Player joined through Geyser/Floodgate.
+}`} />
+
+This keeps Floodgate-specific logic isolated from the rest of your plugin.
+
+## Checking a player
+
+Use `BedrockUtils.isBedrockPlayer(Player)` to determine whether a player is a Bedrock player:
+
+<Code lang="java" code={`
+Player player = event.getPlayer ();
+
+if (BedrockUtils.isBedrockPlayer (player)) { player.sendMessage (Component.text ("Welcome, Bedrock player!")); }`} />
+
+The method returns:
+
+| Result  | Meaning                                                              |
+|---------|----------------------------------------------------------------------|
+| `true`  | The player was identified as a Floodgate player.                     |
+| `false` | The player is not a Floodgate player, or Floodgate is not installed. |
+
+## Optional Floodgate dependency
+
+Floodgate is an optional dependency.
+
+`BedrockUtils` checks whether the Floodgate plugin is enabled before accessing the Floodgate API.
+
+If Floodgate is not installed, the utility remains safe to use and `isBedrockPlayer(...)` returns `false`.
+
+This means plugins can use `BedrockUtils` without making Floodgate a required dependency.
+
+## Paper plugin configuration
+
+To allow `BedrockUtils` to access Floodgate when it is installed, declare Floodgate as an optional dependency in
+`paper-plugin.yml`:
+
+<Code lang="yaml" code={`
+dependencies:
+  bootstrap:
+    floodgate:
+      load: BEFORE
+      required: false
+      join-classpath: true
+  server:
+    floodgate:
+      load: BEFORE
+      required: false
+      join-classpath: true
+`} />
+
+Both the `bootstrap` and `server` dependency entries are required for the integration.
+
+The dependency is marked as optional with `required: false`, so your plugin can still run without Floodgate.
+
+`join-classpath: true` makes Floodgate's classes available to the plugin when Floodgate is installed.
+
+## Why use BedrockUtils?
+
+Without `BedrockUtils`, a plugin that wants to detect Bedrock players has to interact directly with Floodgate:
+
+<Code lang="java" code={`
+FloodgateApi.getInstance()
+    .isFloodgatePlayer(player.getUniqueId());
+`} />
+
+With Reedwork, the Floodgate-specific implementation is hidden behind:
+
+<Code lang="java" code={`
+BedrockUtils.isBedrockPlayer(player);
+`} />
+
+This gives your plugin a small, dependency-aware API while keeping Floodgate integration in one place.
+
+## API
+
+### `isBedrockPlayer(Player player)`
+
+Checks whether the specified player joined through Floodgate.
+
+**Parameters:**
+
+| Parameter | Type     | Description          |
+|-----------|----------|----------------------|
+| `player`  | `Player` | The player to check. |
+
+**Returns:**
+
+`true` if the player is identified as a Floodgate player; otherwise `false`.
+
+If Floodgate is unavailable, the method also returns `false`.
+
+## Summary
+
+`BedrockUtils` provides a minimal integration layer for Floodgate:
+
+- detects Bedrock players through Floodgate;
+- does not require Floodgate to be installed;
+- safely returns `false` when Floodgate is unavailable;
+- keeps Floodgate-specific API usage out of plugin code;
+- requires only a small optional dependency configuration in `paper-plugin.yml`.
+
+The utility is intentionally small: use it whenever your plugin needs to distinguish between Java and Bedrock players
+without directly depending on the Floodgate API throughout your application.

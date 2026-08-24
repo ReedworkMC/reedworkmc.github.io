@@ -40,7 +40,15 @@ export default defineConfig({
                         {label: 'Commands', slug: 'features/commands'},
                         {label: 'Events', slug: 'features/events'},
                         {label: 'Enchantments', slug: 'features/enchantments'},
-                        {label: 'Utilities', slug: 'features/utilities'},
+                    ],
+                },
+                {
+                    label: 'Utilities',
+                    items: [
+                        {label: 'Bedrock Utils', slug: 'utilities/bedrock-utils'},
+                        {label: 'Bukkit to String', slug: 'utilities/bukkit-to-string'},
+                        {label: 'Color Utils', slug: 'utilities/color-utils'},
+                        {label: 'Colorfulness Finder', slug: 'utilities/colorfulness-finder'},
                     ],
                 },
             ],

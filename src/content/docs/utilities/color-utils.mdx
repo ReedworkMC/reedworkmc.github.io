@@ -1,0 +1,233 @@
+---
+title: Color Utilities
+description: Generate gradients, extract colors, convert colors to hexadecimal, and create random Bukkit colors with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+
+# Color Utilities
+
+Reedwork provides `ColorUtils` for common color-related operations.
+
+The utility works primarily with Bukkit `Color` and Adventure `Component` objects.
+
+The available methods can be used for text gradients, image-based color palettes, hexadecimal color values, and randomly generated colors.
+
+## Generate gradient text
+
+### `generateGradientText(String text, Color start, Color end)`
+
+Creates an Adventure `Component` whose characters transition from one color to another.
+
+<Code lang="java" code={`
+Color start = Color.fromRGB(255, 0, 0);
+Color end = Color.fromRGB(0, 0, 255);
+
+Component text = ColorUtils.generateGradientText(
+    "Hello Reedwork!",
+    start,
+    end
+);
+`} />
+
+The first color is applied to the beginning of the text and the second color to the end.
+
+The returned value is an Adventure `Component` and can therefore be sent directly to a player:
+
+<Code lang="java" code={`
+player.sendMessage(
+    ColorUtils.generateGradientText(
+        "Hello Reedwork!",
+        Color.fromRGB(255, 0, 0),
+        Color.fromRGB(0, 255, 255)
+    )
+);
+`} />
+
+This is useful for colorful messages, titles, command feedback, and other Adventure-based text.
+
+## Extract two colors from an image
+
+### `extractTwoColors(BufferedImage image)`
+
+Analyzes a `BufferedImage` and returns two signal colors detected in the image.
+
+<Code lang="java" code={`
+BufferedImage image = ImageIO.read(file);
+
+Color[] colors = ColorUtils.extractTwoColors(image);
+
+Color first = colors[0];
+Color second = colors[1];
+`} />
+
+The returned array contains two colors that can be used as a color palette.
+
+For example, the colors can be passed directly to `generateGradientText`:
+
+<Code lang="java" code={`
+Color[] colors = ColorUtils.extractTwoColors(image);
+
+Component gradient = ColorUtils.generateGradientText(
+    "Welcome!",
+    colors[0],
+    colors[1]
+);
+
+player.sendMessage(gradient);
+`} />
+
+If the image does not provide enough suitable colors, the utility generates additional random colors before determining the result.
+
+## Convert a Bukkit color to hexadecimal
+
+### `colorToHex(org.bukkit.Color color)`
+
+Converts a Bukkit `Color` into a hexadecimal color string.
+
+<Code lang="java" code={`
+Color color = Color.fromRGB(255, 128, 64);
+
+String hex = ColorUtils.colorToHex(color);
+`} />
+
+The resulting value is:
+
+<Code lang="text" code={`#ff8040`} />
+
+Only the RGB channels are included in the resulting hexadecimal value.
+
+## Convert an AWT color to hexadecimal
+
+### `colorToHex(java.awt.Color color)`
+
+`ColorUtils` also supports `java.awt.Color`.
+
+<Code lang="java" code={`
+java.awt.Color color = new java.awt.Color(64, 128, 255);
+
+String hex = ColorUtils.colorToHex(color);
+`} />
+
+The resulting value is:
+
+<Code lang="text" code={`#4080ff`} />
+
+As with Bukkit colors, the RGB channels are converted into hexadecimal notation.
+
+## Generate a random color
+
+### `randomColor()`
+
+Creates a random Bukkit `Color`.
+
+<Code lang="java" code={`
+Color color = ColorUtils.randomColor();
+`} />
+
+Each RGB channel is generated independently, allowing the method to produce colors across the full RGB range.
+
+This is useful when a color is needed dynamically without selecting specific RGB values.
+
+## Combining the utilities
+
+The color utilities can be combined to create simple image-based visual effects.
+
+For example, an image can provide two colors which are then used as the endpoints of a text gradient:
+
+<Code lang="java" code={`
+Color[] colors = ColorUtils.extractTwoColors(image);
+
+Component gradient = ColorUtils.generateGradientText(
+    "Welcome!",
+    colors[0],
+    colors[1]
+);
+
+player.sendMessage(gradient);
+`} />
+
+This separates the two operations:
+
+1. `extractTwoColors(...)` determines the color palette.
+2. `generateGradientText(...)` applies the palette to Adventure text.
+
+## API
+
+### `generateGradientText(String text, Color start, Color end)`
+
+Creates an Adventure component with a gradient between two Bukkit colors.
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `text` | `String` | The text to color. |
+| `start` | `Color` | The color at the beginning of the text. |
+| `end` | `Color` | The color at the end of the text. |
+
+**Returns:**
+
+An Adventure `Component` containing the gradient-colored text.
+
+### `extractTwoColors(BufferedImage image)`
+
+Extracts two signal colors from an image.
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `image` | `BufferedImage` | The image to analyze. |
+
+**Returns:**
+
+An array containing two `Color` values.
+
+### `colorToHex(org.bukkit.Color color)`
+
+Converts a Bukkit color into hexadecimal notation.
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `color` | `Color` | The Bukkit color to convert. |
+
+**Returns:**
+
+A hexadecimal RGB string such as `#ff8040`.
+
+### `colorToHex(java.awt.Color color)`
+
+Converts an AWT color into hexadecimal notation.
+
+**Parameters:**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `color` | `java.awt.Color` | The AWT color to convert. |
+
+**Returns:**
+
+A hexadecimal RGB string such as `#4080ff`.
+
+### `randomColor()`
+
+Generates a random Bukkit color.
+
+**Returns:**
+
+A randomly generated Bukkit `Color`.
+
+## Summary
+
+`ColorUtils` provides a small collection of utilities for common color operations:
+
+- generating Adventure gradient text;
+- extracting two colors from an image;
+- converting Bukkit colors to hexadecimal;
+- converting AWT colors to hexadecimal;
+- generating random Bukkit colors.
+
+The utilities can also be combined to build higher-level visual effects, such as generating a text gradient from colors extracted from an image.

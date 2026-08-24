@@ -1,0 +1,138 @@
+---
+title: ColorfulnessFinder
+description: Select the two most colorful Bukkit colors with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+
+# ColorfulnessFinder
+
+`ColorfulnessFinder` provides a small utility for selecting the two most colorful colors from a set of Bukkit `Color` values.
+
+It is primarily useful when an application has multiple candidate colors and needs to determine which two provide the strongest visual signal.
+
+The utility evaluates each color using its HSL saturation and lightness and returns the two colors with the highest resulting score.
+
+## Finding two signal colors
+
+### `getTwoSignalColors(Color[] colors)`
+
+Pass an array of Bukkit `Color` values to `getTwoSignalColors(...)`:
+
+<Code lang="java" code={`
+Color[] colors = {
+    Color.fromRGB(255, 0, 0),
+    Color.fromRGB(0, 255, 0),
+    Color.fromRGB(0, 0, 255),
+    Color.fromRGB(128, 128, 128)
+};
+
+Color[] signalColors = ColorfulnessFinder.getTwoSignalColors(colors);
+
+Color first = signalColors[0];
+Color second = signalColors[1];
+`} />
+
+The method returns exactly two colors.
+
+The first result is the color with the highest colorfulness score, while the second result is the color with the second-highest score.
+
+## How colorfulness is calculated
+
+`ColorfulnessFinder` converts each RGB color into the HSL color model.
+
+The colorfulness score is calculated as:
+
+***
+colorfulness = saturation × lightness
+***
+
+Higher saturation increases the score, while lightness influences how strongly the color contributes to the result.
+
+The colors are then sorted by this score in descending order.
+
+The two colors at the top of the sorted list are returned.
+
+## Example
+
+For example, given several colors:
+
+<Code lang="java" code={`
+Color[] colors = {
+    Color.fromRGB(255, 0, 0),
+    Color.fromRGB(100, 100, 100),
+    Color.fromRGB(0, 180, 255),
+    Color.fromRGB(40, 40, 40)
+};
+
+Color[] result = ColorfulnessFinder.getTwoSignalColors(colors);
+`} />
+
+`result[0]` contains the most colorful candidate and `result[1]` contains the second-most colorful candidate according to the utility's colorfulness calculation.
+
+The method does not modify the input array.
+
+## Using it with ColorUtils
+
+`ColorfulnessFinder` is particularly useful together with `ColorUtils.extractTwoColors(...)`.
+
+`extractTwoColors(...)` collects candidate colors from an image and uses `ColorfulnessFinder` to select the two strongest signal colors.
+
+The same operation can also be performed manually:
+
+<Code lang="java" code={`
+Color[] candidates = {
+    Color.fromRGB(255, 80, 80),
+    Color.fromRGB(80, 255, 80),
+    Color.fromRGB(80, 80, 255),
+    Color.fromRGB(120, 120, 120)
+};
+
+Color[] signalColors =
+    ColorfulnessFinder.getTwoSignalColors(candidates);
+
+Component gradient = ColorUtils.generateGradientText(
+    "Welcome!",
+    signalColors[0],
+    signalColors[1]
+);
+`} />
+
+This makes `ColorfulnessFinder` useful as a small color-selection step before generating gradients or other visual effects.
+
+## API
+
+### `getTwoSignalColors(Color[] colors)`
+
+Finds the two colors with the highest colorfulness scores.
+
+**Parameters:**
+
+| Parameter | Type      | Description                       |
+|-----------|-----------|-----------------------------------|
+| `colors`  | `Color[]` | The candidate colors to evaluate. |
+
+**Returns:**
+
+An array containing exactly two colors:
+
+| Index | Description                                           |
+|-------|-------------------------------------------------------|
+| `0`   | The color with the highest colorfulness score.        |
+| `1`   | The color with the second-highest colorfulness score. |
+
+The input array must contain at least two colors.
+
+## Summary
+
+`ColorfulnessFinder` provides a focused utility for selecting visually strong colors from a collection.
+
+It:
+
+- converts RGB colors into HSL;
+- calculates a colorfulness score from saturation and lightness;
+- sorts the candidate colors by that score;
+- returns the two highest-scoring colors;
+- can be combined with `ColorUtils` for image-based gradients and other visual effects.
+
+For image-based color extraction, see [Color Utilities](../color-utils/).
