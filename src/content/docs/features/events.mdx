@@ -1,0 +1,74 @@
+---
+title: Events
+description: Automatically discover and register Bukkit and Paper event listeners with Reedwork.
+---
+
+import {Code} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github";
+
+export const eventCode = await getExample("EventListenerExample/src/main/java/dev/reedworkmc/examples/eventlistener/events/PlayerConnectionEvents.java");
+export const pluginCode = await getExample("EventListenerExample/src/main/java/dev/reedworkmc/examples/eventlistener/EventListenerExample.java");
+
+# Events
+
+Reedwork automatically discovers and registers Bukkit and Paper event listeners.
+
+You can continue using the familiar Bukkit/Paper event API with `Listener` and `@EventHandler`.
+
+The only Reedwork-specific change is to annotate the listener class with `@EventListener`.
+
+## Creating an event listener
+
+A Reedwork event listener is a regular Bukkit/Paper `Listener`:
+
+<Code title="PlayerConnectionEvents.java" lang="java" code={eventCode}/>
+
+The only Reedwork-specific part is the `@EventListener` annotation:
+
+<Code lang="java" mark="@EventListener" code={`
+@EventListener
+public final class PlayerConnectionEvents implements Listener {
+    // ...
+`} />
+
+The annotation tells Reedwork to discover the listener during package scanning.
+
+Everything else remains standard Bukkit/Paper event handling.
+
+## Automatic registration
+
+The plugin only needs to initialize Reedwork and scan the package containing the listener:
+
+<Code title="EventListenerExample.java" lang="java" code={pluginCode}/>
+
+When Reedwork scans the package, it discovers the `@EventListener` class and registers it with Paper automatically.
+
+Without Reedwork, the listener would have to be registered manually through Bukkit's plugin manager.
+
+With Reedwork, no explicit registration call is required.
+
+## The result
+
+The complete setup consists of a normal Paper listener with a single Reedwork annotation:
+
+<Code lang="java" mark="@EventListener" code={`
+@EventListener
+public final class PlayerConnectionEvents implements Listener {
+    // standard Bukkit/Paper event handlers
+}`} />
+
+This keeps the event API familiar while removing the registration boilerplate.
+
+## Next steps
+
+Events are also Reedwork-managed components and can therefore be combined with other Reedwork systems.
+
+Continue with [Dependency Injection](../dependency-injection/) to learn how dependencies can be resolved automatically.
+
+You can also explore:
+
+- [Commands](../commands/)
+- [Enchantments](../enchantments/)
+- [Utilities](../utilities/)
+
+The complete runnable event listener example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
