@@ -259,35 +259,37 @@ The resolver registry currently covers the following categories.
 
 | Java type            | Paper argument          | Description                             |
 | -------------------- | ----------------------- | --------------------------------------- |
-| `Player`             | Player                  | Resolves a player selector.             |
-| `Entity`             | Entity                  | Resolves an entity selector.            |
-| `World`              | World                   | Resolves a world.                       |
-| `GameMode`           | Game Mode               | Resolves a Minecraft game mode.         |
-| `HeightMap`          | Height Map              | Resolves a height map.                  |
-| `DisplaySlot`        | Scoreboard Display Slot | Resolves a scoreboard display slot.     |
-| `ItemStack`          | Item Stack              | Resolves an item stack argument.        |
-| `ItemStackPredicate` | Item Predicate          | Resolves an item predicate.             |
-| `Criteria`           | Objective Criteria      | Resolves scoreboard objective criteria. |
-| `LookAnchor`         | Entity Anchor           | Resolves an entity look anchor.         |
-| `Component`          | Component               | Adventure components.                   |
-| `Style`              | Style                   | Adventure text styles.                  |
-| `NamedTextColor`     | Named Color             | Adventure named text colors.            |
-| `Key`                | Key                     | Adventure keys.                         |
-| `NamespacedKey`      | Namespaced Key          | Bukkit namespaced keys.                 |
-| `HexColor`           | Hex Color               | Hexadecimal colors.                     |
 | `BlockState`         | Block State             | Resolves a block state.                 |
 | `BlockPosition`      | Block Position          | Resolves a block position.              |
+| `Component`          | Component               | Adventure components.                   |
+| `Criteria`           | Objective Criteria      | Resolves scoreboard objective criteria. |
+| `DisplaySlot`        | Scoreboard Display Slot | Resolves a scoreboard display slot.     |
+| `Entity`             | Entity                  | Resolves an entity.                     |
 | `FinePosition`       | Fine Position           | Resolves a precise world position.      |
-| `IntegerRange`       | Integer Range           | Resolves an integer range.              |
-| `DoubleRange`        | Double Range            | Resolves a double range.                |
+| `GameMode`           | Game Mode               | Resolves a Minecraft game mode.         |
+| `HexColor`           | Hex Color               | Hexadecimal colors.                     |
+| `HeightMap`          | Height Map              | Resolves a height map.                  |
+| `ItemStack`          | Item Stack              | Resolves an item stack argument.        |
+| `ItemStackPredicate` | Item Predicate          | Resolves an item predicate.             |
+| `Key`                | Key                     | Adventure keys.                         |
+| `LookAnchor`         | Entity Anchor           | Resolves an entity look anchor.         |
+| `NamedTextColor`     | Named Color             | Adventure named text colors.            |
+| `NamespacedKey`      | Namespaced Key          | Bukkit namespaced keys.                 |
+| `Player`             | Player                  | Resolves a player.                      |
+| `Style`              | Style                   | Adventure text styles.                  |
+| `World`              | World                   | Resolves a world.                       |
 
+#### Ranges
+
+| `DoubleRange`        | Double Range            | Resolves a double range.                |
+| `IntegerRange`       | Integer Range           | Resolves an integer range.              |
 
 #### Collections
 
 | Java type             | Paper argument          | Description                             |
 | --------------------- | ----------------------- | --------------------------------------- |
-| `List<Player>`        | Players                 | Resolves multiple players.              |
 | `List<Entity>`        | Entities                | Resolves multiple entities.             |
+| `List<Player>`        | Players                 | Resolves multiple players.              |
 | `List<PlayerProfile>` | Player Profiles         | Resolves player profiles.               |
 
 ### Additional Minecraft arguments
