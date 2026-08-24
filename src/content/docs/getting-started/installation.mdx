@@ -3,8 +3,10 @@ title: Installation
 description: Learn how to install Reedwork in your PaperMC plugin.
 ---
 
-import { FileTree, Code } from '@astrojs/starlight/components';
-import { getLatestReedworkRelease } from '@lib/reedwork-release';
+import {FileTree, Code, Steps, Badge} from '@astrojs/starlight/components';
+import {getLatestReedworkRelease} from '@lib/reedwork-release';
+import AstroTabItem from '../../../components/AstroTabItem.astro';
+import AstroTabs from '../../../components/AstroTabs.astro';
 
 export const release = await getLatestReedworkRelease();
 export const { version, downloadUrl, jarName } = release;
@@ -17,44 +19,152 @@ The latest release is **{version}**.
 
 <a href={downloadUrl}>Download {jarName}</a> or visit the [GitHub Releases](https://github.com/ReedworkMC/Reedwork/releases/latest) page.
 
-Place the downloaded JAR in the `libs` directory of your plugin project:
+## Install <Badge text="Recommended" variant="note" />
 
-<FileTree>
-    - my-plugin
-        - libs
-            - {jarName}
-        - src
+This installation only needs to be performed once for each Reedwork version.
+
+The recommended approach is to install the Reedwork JAR into your local Maven repository and then use the normal Maven coordinates from your build system.
+
+<Steps>
+1.
+    Download the latest Reedwork JAR and install it into your local Maven repository.
+
+    <Code lang="bash" code={`
+mvn install:install-file \
+    -Dfile=<PATH_TO_DOWNLOADED_JAR>/${jarName} \
+    -DgroupId=dev.reedworkmc \
+    -DartifactId=reedwork \
+    -Dversion=${version} \
+    -Dpackaging=jar
+`}
+    />
+
+    Maven installs the artifact into your local repository, normally located at `~/.m2/repository`.
+
+    After the installation succeeds, the downloaded JAR is no longer required and can be removed.
+
+2.
+    Add Reedwork as a dependency to your project.
+
+    <AstroTabs>
+        <AstroTabItem label="Maven" icon="mdi:console">
+            Add Reedwork to your `pom.xml`:
+
+            <Code lang="xml" code={`
+    <dependency>
+        <groupId>dev.reedworkmc</groupId>
+        <artifactId>reedwork</artifactId>
+        <version>${version}</version>
+    </dependency>`}
+            />
+        </AstroTabItem>
+
+        <AstroTabItem label="Gradle Groovy" icon="mdi:console">
+            Make sure your `build.gradle` includes `mavenLocal()`:
+
+            <Code lang="groovy" code={`
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        implementation "dev.reedworkmc:reedwork:${version}"
+    }`}
+            />
+
+            `mavenLocal()` allows Gradle to resolve the Reedwork artifact installed in the local Maven repository.
+        </AstroTabItem>
+
+        <AstroTabItem label="Gradle Kotlin DSL" icon="mdi:console">
+            Make sure your `build.gradle.kts` includes `mavenLocal()`:
+
+            <Code lang="kotlin" code={`
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        implementation("dev.reedworkmc:reedwork:${version}")
+    }`}
+            />
+
+            `mavenLocal()` allows Gradle to resolve the Reedwork artifact installed in the local Maven repository.
+        </AstroTabItem>
+    </AstroTabs>
+</Steps>
+
+## Legacy Install <Badge text="Legacy" variant="caution" />
+
+The legacy installation keeps the Reedwork JAR directly inside your plugin project instead of installing it into the local Maven repository.
+
+This can be useful when you do not want to install Reedwork into a local Maven repository.
+
+<Steps>
+1.
+    Place the downloaded JAR in the `libs` directory of your plugin project:
+
+    <FileTree>
+        - my-plugin
+            - libs
+                - {jarName}
+            - src
+                - ...
             - ...
-        - ...
-</FileTree>
+    </FileTree>
 
-## Maven
+2.
+    Add the local JAR as a dependency.
 
-If you are using Maven, add Reedwork as a local dependency to your `pom.xml`:
+    <AstroTabs>
+        <AstroTabItem label="Maven" icon="mdi:console">
+            Add Reedwork as a system-scoped dependency to your `pom.xml`:
 
-<Code lang="xml" code={`
-<dependency>
-    <groupId>dev.reedworkmc</groupId>
-    <artifactId>reedwork</artifactId>
-    <version>${version}</version>
-    <scope>system</scope>
-    <systemPath>\${project.basedir}/libs/${jarName}</systemPath>
-</dependency>`}
-/>
+            <Code lang="xml" code={`
+    <dependency>
+        <groupId>dev.reedworkmc</groupId>
+        <artifactId>reedwork</artifactId>
+        <version>${version}</version>
+        <scope>system</scope>
+        <systemPath>\${project.basedir}/libs/${jarName}</systemPath>
+    </dependency>`}
+            />
 
-The JAR must be located at <code>libs/{jarName}</code> relative to your project root.
+            The JAR must be located at `libs/{jarName}` relative to the project root.
+        </AstroTabItem>
 
-## Gradle
+        <AstroTabItem label="Gradle Groovy" icon="mdi:console">
+            Add the local JAR to your `build.gradle`:
 
-For Gradle projects, add the Reedwork JAR as a local dependency in your `build.gradle`:
+            <Code lang="groovy" code={`
+    dependencies {
+        implementation(files("libs/${jarName}"))
+    }`}
+            />
 
-<Code lang="groovy" code={`
-dependencies {
-    implementation(files("libs/${jarName}"))
-}`}
-/>
+            The JAR must be located at `libs/{jarName}` relative to the project root.
+        </AstroTabItem>
 
-The JAR must be located at <code>libs/{jarName}</code> relative to your project root.
+        <AstroTabItem label="Gradle Kotlin DSL" icon="mdi:console">
+            Add the local JAR to your `build.gradle.kts`:
+
+            <Code lang="kotlin" code={`
+    dependencies {
+        implementation(files("libs/${jarName}"))
+    }`}
+            />
+
+            The JAR must be located at `libs/{jarName}` relative to the project root.
+        </AstroTabItem>
+    </AstroTabs>
+</Steps>
+
+## Which installation should I use?
+
+The **local Maven installation** is recommended for normal development.
+
+It keeps the Reedwork JAR outside your project and allows Maven and Gradle to use the same Maven coordinates.
+
+The **legacy installation** is useful when the JAR should remain part of the project itself.
 
 ## Next Steps
 
