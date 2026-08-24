@@ -40,6 +40,7 @@ export default defineConfig({
                         {label: 'Commands', slug: 'features/commands'},
                         {label: 'Events', slug: 'features/events'},
                         {label: 'Enchantments', slug: 'features/enchantments'},
+                        {label: 'Utilities', slug: 'features/utilities'},
                     ],
                 },
                 {
