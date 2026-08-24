@@ -1,0 +1,180 @@
+---
+import {Icon as AstroIcon} from 'astro-icon/components';
+import {Icon as StarlightIcon} from '@astrojs/starlight/components';
+---
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <div class="brand">
+                <span>Reedwork</span>
+            </div>
+
+            <p>
+                A modern framework for building PaperMC plugins with less boilerplate.
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h2>Resources</h2>
+
+            <a href="/getting-started/introduction/">
+                <AstroIcon name="mdi:book-open-outline"/>
+                Documentation
+            </a>
+
+            <a href="https://github.com/ReedworkMC/Reedwork" target="_blank" rel="noopener noreferrer">
+                <AstroIcon name="mdi:github" class="link-icon"/>
+                GitHub
+                <span class="external-icon">
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+                     </span>
+            </a>
+
+            <a href="https://github.com/ReedworkMC/Reedwork/releases" target="_blank" rel="noopener noreferrer">
+                <AstroIcon name="mdi:tag-outline" class="link-icon"/>
+                Releases
+                <span class="external-icon">
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+                    </span>
+            </a>
+        </div>
+
+        <div class="footer-column">
+            <h2>Project</h2>
+
+            <a href="/contributing/">
+                <AstroIcon name="mdi:source-pull"/>
+                Contributing
+            </a>
+
+            <a href="/license/">
+                <AstroIcon name="mdi:license"/>
+                License
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>
+            © 2026-present <a href="https://github.com/0kAj" target="_blank" rel="noopener noreferrer">0kAj</a>
+        </span>
+
+        <span>
+            Icons by <a href="https://github.com/Templarian/MaterialDesign" target="_blank" rel="noopener noreferrer">Material Design Icons</a>
+        </span>
+    </div>
+</footer>
+
+<style>
+    @layer starlight.components {
+        .site-footer {
+            border-top: 1px solid var(--sl-color-gray-5);
+            margin-top: 4rem;
+            padding: 3rem 1.5rem 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand p {
+            max-width: 25rem;
+            margin-top: 1rem;
+
+            color: var(--sl-color-gray-3);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-column h2 {
+            margin: 0 0 0.5rem;
+
+            font-size: var(--sl-text-sm);
+            font-weight: 700;
+            color: var(--sl-color-white);
+        }
+
+        .footer-column a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            color: var(--sl-color-gray-3);
+            text-decoration: none;
+
+            transition: color 0.15s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--sl-color-white);
+        }
+
+        .footer-column svg {
+            width: 1.1em;
+            height: 1.1em;
+        }
+
+        .external-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-left: auto;
+        }
+
+        .link-icon {
+            width: 1.1em;
+            height: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 1rem;
+
+            border-top: 1px solid var(--sl-color-gray-5);
+
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+
+            color: var(--sl-color-gray-4);
+            font-size: var(--sl-text-xs);
+        }
+
+        .footer-bottom a {
+            color: inherit;
+        }
+
+        @media (max-width: 700px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
+    }
+</style>

@@ -1,40 +1,146 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Reedwork
+description: A modern framework for building PaperMC plugins with less boilerplate.
+template: splash
+
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+    title: Build better Paper plugins.
+    tagline: Less boilerplate. More time for your plugin.
+    actions:
+      - text: Get Started
+        link: /getting-started/introduction/
+        icon: right-arrow
+      - text: View on GitHub
+        link: https://github.com/ReedworkMC/Reedwork
+        icon: external
+        variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import {CardGrid, Steps} from '@astrojs/starlight/components';
+import AstroIconCard from '../../components/AstroIconCard.astro';
+import Footer from '../../components/Footer.astro';
 
-## Next steps
+## Everything you need to build with less boilerplate
+
+Reedwork handles the repetitive parts of Paper plugin development, so you can focus on building the features that make your plugin unique.
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+    <AstroIconCard title="Dependency Injection" icon="mdi:needle">
+        Automatically discover and inject dependencies into commands, listeners, services, and other plugin components.
+    </AstroIconCard>
+
+    <AstroIconCard title="Annotation-Based Commands" icon="mdi:console-line">
+        Define commands and subcommands with annotations instead of repetitive registration code.
+    </AstroIconCard>
+
+    <AstroIconCard title="Automatic Events" icon="mdi:event-search">
+        Discover and register Bukkit and Paper event listeners automatically.
+    </AstroIconCard>
+
+    <AstroIconCard title="Custom Enchantments" icon="mdi:stars">
+        Define and automatically register custom enchantments using Paper's experimental enchantment features.
+    </AstroIconCard>
+
+    <AstroIconCard title="Brigadier Integration" icon="mdi:lightning-bolt">
+        Leverage Paper's Brigadier command system for parsing, validation, execution, and native suggestions.
+    </AstroIconCard>
+
+    <AstroIconCard title="Automatic Parameter Resolution" icon="mdi:cached">
+        Parameters are resolved from their declared Java types, reducing manual parsing and conversion code.
+    </AstroIconCard>
+
+    <AstroIconCard title="Permission Support" icon="mdi:protected">
+        Protect commands with Bukkit and Paper's permission system.
+    </AstroIconCard>
+
+    <AstroIconCard title="Automatic Usage Generation" icon="mdi:account-help">
+        Keep generated command usage consistent with your command structure.
+    </AstroIconCard>
+
+    <AstroIconCard title="Developer Utilities" icon="mdi:help-outline">
+        Reusable utilities for common Bukkit and Paper development tasks.
+    </AstroIconCard>
 </CardGrid>
+
+## See Reedwork in action
+
+Reedwork lets you define a command without manually registering it with
+the server.
+
+```java
+@Command(
+value = "hello",
+description = "Say hello"
+)
+public final class HelloCommand {
+
+    @CommandHandler
+    public boolean execute(CommandContext context) {
+        context.player().sendMessage(
+            Component.text("Hello, Reedwork!")
+        );
+
+        return true;
+    }
+}
+```
+
+The command is discovered and registered automatically when your plugin
+scans its components.
+
+## How Reedwork works
+
+Reedwork does not try to take control of your application architecture.
+
+Instead, it provides the infrastructure around your plugin components:
+
+<Steps>
+1. **Discover**
+
+   Reedwork scans your plugin package and discovers supported components.
+
+2. **Resolve**
+
+   Dependencies are automatically resolved through Reedwork's dependency injection system.
+
+3. **Register**
+
+   Commands, listeners, enchantments, and other supported components are registered with Paper automatically.
+</Steps>
+
+## Dependency injection without the boilerplate
+
+Dependencies are resolved automatically, allowing your plugin components to remain focused on their actual responsibilities.
+
+```java
+@Command("hello")
+public final class HelloCommand {
+
+    private final GreeterService greeterService;
+
+    public HelloCommand(GreeterService greeterService) {
+        this.greeterService = greeterService;
+    }
+
+    @CommandHandler
+    public boolean execute(CommandContext context) {
+        greeterService.sendGreeting(context.player());
+        return true;
+    }
+}
+```
+
+No service locator.
+No manual wiring.
+Just constructor dependencies.
+
+## Start building
+
+Ready to reduce boilerplate in your next PaperMC plugin?
+
+[Get started →](/getting-started/introduction/)
+
+[View Reedwork on GitHub →](https://github.com/ReedworkMC/Reedwork)
+
+
+<Footer />
