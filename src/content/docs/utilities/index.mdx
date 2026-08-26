@@ -1,0 +1,62 @@
+---
+title: PaperMC Plugin Utilities | Reedwork
+description: Explore Reedwork utility classes for PaperMC and Bukkit plugin development, including Bedrock detection, object formatting, color utilities, and color selection.
+---
+
+# PaperMC Plugin Utilities
+
+Reedwork provides a collection of small **utility classes for PaperMC and Bukkit plugin development**.
+
+Each utility focuses on a specific development task and can be used independently. They are designed to complement the Paper API rather than replace it.
+
+## Available utilities
+
+### BedrockUtils
+
+[BedrockUtils](./bedrock-utils/) detects whether a player joined through **Geyser and Floodgate**.
+
+Use it when a Paper plugin needs to distinguish between Java Edition and Bedrock players without accessing the Floodgate API throughout the application.
+
+### BukkitToString
+
+[BukkitToString](./bukkit-to-string/) converts common Bukkit objects into compact, human-readable strings.
+
+It supports locations, worlds, vectors, blocks, materials, items, entities, players, and rotation values.
+
+This is useful for plugin messages, command output, logging, and debugging.
+
+### ColorUtils
+
+[ColorUtils](./color-utils/) provides color utilities for Paper and Adventure-based plugin development.
+
+It supports:
+
+- generating text gradients
+- extracting colors from images
+- converting Bukkit and AWT colors to hexadecimal
+- generating random Bukkit colors
+
+### ColorfulnessFinder
+
+[ColorfulnessFinder](./colorfulness-finder/) selects the two most colorful Bukkit colors from a collection.
+
+It can be used independently or together with [ColorUtils](./color-utils/) for image-based color extraction and gradient generation.
+
+## Using the utilities
+
+The utilities are independent of each other unless explicitly combined.
+
+For example, `ColorUtils` and `ColorfulnessFinder` can be used together for color extraction and gradient generation, while `BedrockUtils` provides a separate integration with Floodgate.
+
+Choose a utility above to see its API and usage examples.
+
+## Other Reedwork features
+
+The utilities are part of the broader Reedwork framework for PaperMC plugin development.
+
+Explore:
+
+- [Commands](../commands/) — build PaperMC commands with Java annotations and automatic parameter resolution.
+- [Events](../events/) — automatically discover and register Bukkit and Paper event listeners.
+- [Enchantments](../enchantments/) — define and register custom Minecraft enchantments.
+- [Dependency Injection](../dependency-injection/) — resolve plugin dependencies through constructor injection.

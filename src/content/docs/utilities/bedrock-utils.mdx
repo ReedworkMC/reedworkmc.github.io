@@ -1,53 +1,58 @@
 ---
-title: BedrockUtils
-description: Detect Bedrock players through Floodgate with Reedwork.
+title: Detect Bedrock Players with Floodgate | Reedwork
+description: Detect Bedrock players in PaperMC plugins using Geyser and Floodgate with Reedwork's BedrockUtils utility.
 ---
 
 import {Code} from "@astrojs/starlight/components";
 
-# BedrockUtils
+# Detect Bedrock Players with Floodgate
 
-`BedrockUtils` provides a simple way to detect whether a player joined through Geyser/Floodgate.
+`BedrockUtils` provides a simple way for **PaperMC plugins to detect Bedrock players through Geyser and Floodgate**.
 
-Instead of interacting with the Floodgate API directly, plugins can use a single utility method:
+Instead of accessing the Floodgate API directly throughout your plugin, you can use a single utility method:
 
 <Code lang="java" code={`
 if (BedrockUtils.isBedrockPlayer(player)) {
     // Player joined through Geyser/Floodgate.
 }`} />
 
-This keeps Floodgate-specific logic isolated from the rest of your plugin.
+This keeps Floodgate-specific integration isolated from the rest of your plugin code.
 
-## Checking a player
+## Check whether a player is on Bedrock
 
-Use `BedrockUtils.isBedrockPlayer(Player)` to determine whether a player is a Bedrock player:
+Use `BedrockUtils.isBedrockPlayer(Player)` to determine whether a player was identified by Floodgate:
 
 <Code lang="java" code={`
-Player player = event.getPlayer ();
+Player player = event.getPlayer();
 
-if (BedrockUtils.isBedrockPlayer (player)) { player.sendMessage (Component.text ("Welcome, Bedrock player!")); }`} />
+if (BedrockUtils.isBedrockPlayer(player)) {
+    player.sendMessage(
+        Component.text("Welcome, Bedrock player!")
+    );
+}`} />
 
 The method returns:
 
-| Result  | Meaning                                                              |
-|---------|----------------------------------------------------------------------|
-| `true`  | The player was identified as a Floodgate player.                     |
-| `false` | The player is not a Floodgate player, or Floodgate is not installed. |
+| Result  | Meaning                                                            |
+|---------|--------------------------------------------------------------------|
+| `true`  | The player was identified as a Floodgate player.                   |
+| `false` | The player is not a Floodgate player, or Floodgate is unavailable. |
 
-## Optional Floodgate dependency
+This makes the method suitable for conditional behavior such as Bedrock-specific messages, interfaces, or gameplay handling.
+
+## Floodgate is optional
 
 Floodgate is an optional dependency.
 
-`BedrockUtils` checks whether the Floodgate plugin is enabled before accessing the Floodgate API.
+`BedrockUtils` checks whether Floodgate is enabled before accessing its API.
 
-If Floodgate is not installed, the utility remains safe to use and `isBedrockPlayer(...)` returns `false`.
+If Floodgate is not installed, `isBedrockPlayer(...)` returns `false`.
 
-This means plugins can use `BedrockUtils` without making Floodgate a required dependency.
+This allows a Paper plugin to use the utility without making Floodgate a required dependency.
 
-## Paper plugin configuration
+## Configure Floodgate in `paper-plugin.yml`
 
-To allow `BedrockUtils` to access Floodgate when it is installed, declare Floodgate as an optional dependency in
-`paper-plugin.yml`:
+To allow `BedrockUtils` to access Floodgate when it is installed, declare Floodgate as an optional dependency in `paper-plugin.yml`:
 
 <Code lang="yaml" code={`
 dependencies:
@@ -65,26 +70,28 @@ dependencies:
 
 Both the `bootstrap` and `server` dependency entries are required for the integration.
 
-The dependency is marked as optional with `required: false`, so your plugin can still run without Floodgate.
+The dependency remains optional because both entries use:
+
+<Code lang="yaml" code={`required: false`} />
 
 `join-classpath: true` makes Floodgate's classes available to the plugin when Floodgate is installed.
 
 ## Why use BedrockUtils?
 
-Without `BedrockUtils`, a plugin that wants to detect Bedrock players has to interact directly with Floodgate:
+A plugin can access Floodgate directly:
 
 <Code lang="java" code={`
 FloodgateApi.getInstance()
     .isFloodgatePlayer(player.getUniqueId());
 `} />
 
-With Reedwork, the Floodgate-specific implementation is hidden behind:
+With Reedwork, the application code can instead use:
 
 <Code lang="java" code={`
 BedrockUtils.isBedrockPlayer(player);
 `} />
 
-This gives your plugin a small, dependency-aware API while keeping Floodgate integration in one place.
+This keeps the Floodgate API out of the rest of the plugin and gives the application a small, focused API for Bedrock player detection.
 
 ## API
 
@@ -104,15 +111,22 @@ Checks whether the specified player joined through Floodgate.
 
 If Floodgate is unavailable, the method also returns `false`.
 
-## Summary
+## When to use BedrockUtils
 
-`BedrockUtils` provides a minimal integration layer for Floodgate:
+`BedrockUtils` is useful when a Paper plugin needs to distinguish between Java Edition and Bedrock players.
 
-- detects Bedrock players through Floodgate;
-- does not require Floodgate to be installed;
-- safely returns `false` when Floodgate is unavailable;
-- keeps Floodgate-specific API usage out of plugin code;
-- requires only a small optional dependency configuration in `paper-plugin.yml`.
+Typical use cases include:
 
-The utility is intentionally small: use it whenever your plugin needs to distinguish between Java and Bedrock players
-without directly depending on the Floodgate API throughout your application.
+- Bedrock-specific player messages
+- platform-specific UI or interaction
+- different gameplay behavior
+- logging the player's platform
+- optional Geyser/Floodgate integration
+
+The utility intentionally provides only the Bedrock detection layer. Other Floodgate functionality can still be accessed directly when a plugin requires features that `BedrockUtils` does not expose.
+
+## Related utilities
+
+For other PaperMC and Bukkit utilities, see the [Reedwork utility collection](../).
+
+You can also explore [Color Utilities](../color-utils/) for color and Adventure text operations.

@@ -1,94 +1,144 @@
 ---
-title: Quick Start
-description: Build your first PaperMC plugin with Reedwork.
+title: Quick Start - Create a PaperMC Plugin with Reedwork
+description: Create your first PaperMC plugin with Reedwork using automatic discovery, dependency injection, commands, events, and custom enchantments.
 ---
 
 import {Code} from "@astrojs/starlight/components";
-import {getExample} from '@lib/github';
-export const commandCode = await getExample('CommandExample/src/main/java/dev/reedworkmc/examples/command/commands/HelloReedworkCommand.java',);
-export const dependencyInjectionCode = await getExample('DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/commands/ReedworkCommand.java',);
-export const greeterServiceCode = await getExample('DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/GreeterService.java',);
+import {getExample} from "@lib/github";
+
+export const pluginCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/QuickstartExample.java");
+export const bootstrapCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/QuickstartExampleBootstrap.java");
+export const pluginYmlCode = await getExample("QuickstartExample/src/main/resources/paper-plugin.yml");
+export const eventCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/events/PlayerJoinServerEvent.java");
+export const serviceCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/services/ReedworkItemManager.java");
+export const commandCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/commands/HelloCommand.java");
+export const enchantmentCode = await getExample("QuickstartExample/src/main/java/dev/reedworkmc/examples/quickstart/enchantments/ReedworkEnchantment.java");
 
 # Quick Start
 
-This guide walks you through creating your first PaperMC plugin with Reedwork.
+This guide creates a small but complete PaperMC plugin using Reedwork.
 
-By the end, you will have a plugin with:
+The example demonstrates the main Reedwork workflow:
 
-- automatic component discovery
-- dependency injection
-- annotation-based commands
-- automatic command registration
+- automatic component discovery;
+- dependency injection;
+- event listener registration;
+- annotation-based commands;
+- custom enchantment registration.
 
-## 1. Create your plugin
+The complete example is designed to work together as a single plugin.
 
-Start with a regular Paper plugin and add Reedwork as described in the [Installation](../installation/) guide.
+## 1. Create the plugin
 
-Your main plugin class only needs to initialize Reedwork and tell it which package to scan.
+Start with a normal Paper plugin and initialize Reedwork in your main plugin class.
 
-<Code title="MyFirstReedworkPlugin.java" lang="java" code={`
-package dev.reedworkmc.example;
+<Code title="QuickstartExample.java" lang="java" code={pluginCode}/>
 
-import dev.reedworkmc.reedwork.Reedwork;
-import org.bukkit.plugin.java.JavaPlugin;
+The `scan(...)` call tells Reedwork which package contains your plugin components.
 
-public final class MyFirstReedworkPlugin extends JavaPlugin {
+During scanning, Reedwork discovers managed classes such as commands, event listeners, services, and enchantments.
 
-    @Override
-    public void onEnable() {
-        Reedwork.create(this).scan("dev.reedworkmc.example");
-    }
-}
-`}
-/>
+## 2. Enable bootstrap scanning
 
-The `scan` call tells Reedwork where to look for your plugin components.
+Custom enchantments are registered during Paper's bootstrap lifecycle.
 
-Reedwork can then discover supported components such as commands, listeners, and services automatically.
+The plugin therefore needs a bootstrapper:
 
-## 2. Create a command
+<Code title="QuickstartExampleBootstrap.java" lang="java" code={bootstrapCode}/>
 
-Commands can be declared using annotations instead of manually registering
-them with Bukkit or Paper.
+The bootstrapper initializes Reedwork for the Paper registry phase.
 
-<Code title="HelloReedworkCommand.java" lang="java" code={commandCode} />
+The package scan is the same as in the normal plugin lifecycle, allowing Reedwork to discover registry-backed components before the server starts.
 
-The command is discovered and registered automatically when Reedwork scans
-your plugin package.
+Your `paper-plugin.yml` needs to reference the bootstrapper:
 
-The `@Command` annotation defines the command itself.
-The `@CommandHandler` annotation marks the default command handler that is triggered when no arguments are provided.
-The `@SubCommand` annotation can be used to define additional command paths and commands with arguments.
+<Code title="paper-plugin.yml" lang="yaml" code={pluginYmlCode} />
 
 ## 3. Add a service with dependency injection
 
-Reedwork can resolve constructor dependencies automatically.
+Reedwork components can receive dependencies through their constructors.
 
-<Code title="ReedworkCommand.java" lang="java" code={dependencyInjectionCode} />
+The example uses a singleton service that creates a reusable item:
 
-The command declares its dependency through its constructor.
+<Code title="ReedworkItemManager.java" lang="java" code={serviceCode}/>
 
-Reedwork resolves the required component and provides it automatically.
+The `@Singleton` annotation tells Reedwork to create one shared instance.
 
-For example, the command can depend on a service:
+The service is injected into both the command and the event listener.
 
-<Code title="GreeterService.java" lang="java" code={greeterServiceCode} />
+No manual object creation or dependency passing is required.
 
-No service locator and no manual dependency wiring are required.
+## 4. Create an event listener
 
-## Explore Reedwork's features
+Events use the normal Bukkit/Paper event API.
 
-The example repository contains complete, independently runnable examples
-for Reedwork's major features:
+The only Reedwork-specific part is the `@EventListener` annotation:
 
-- [Commands](../features/commands)
-- [Dependency Injection](../features/dependency-injection)
-- [Events](../features/events)
-- [Enchantments](../features/enchantments)
-- [Utilities](../features/utilities)
+<Code title="PlayerJoinServerEvent.java" lang="java" code={eventCode}/>
 
-Each feature guide uses the corresponding example from the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
+When Reedwork scans the package, it creates the listener, resolves its constructor dependencies, and registers it automatically with Paper.
 
-## What's next?
+## 5. Create an annotation-based command
 
-Now that you understand the basic Reedwork workflow, continue with the individual feature guides to learn how each system works in detail.
+Commands are defined as regular Java classes.
+
+<Code title="HelloCommand.java" lang="java" code={commandCode}/>
+
+The `@Command` annotation defines the command metadata.
+
+`@CommandHandler` creates the default command action, while `@SubCommand` creates additional command paths.
+
+Command parameters such as `Player` are resolved automatically by Reedwork.
+
+The same `ReedworkItemManager` service is injected into the command.
+
+## 6. Register a custom enchantment
+
+Custom enchantments are regular Java classes implementing `CustomEnchantment`.
+
+<Code title="ReedworkEnchantment.java" lang="java" code={enchantmentCode}/>
+
+The `@Enchantment` annotation defines the registry key.
+
+During the Paper bootstrap phase, Reedwork discovers the enchantment and creates the corresponding registry entry.
+
+No manual registry code is required.
+
+## How the example works
+
+The final dependency and registration flow looks like this:
+
+```text
+QuickstartExample
+├── Reedwork scanning
+├── HelloCommand
+│   └── ReedworkItemManager
+├── PlayerJoinServerEvent
+│   └── ReedworkItemManager
+└── ReedworkEnchantment
+```
+
+The plugin only declares the components it needs.
+
+Reedwork handles:
+
+- discovering classes
+- creating components
+- resolving dependencies
+- registering listeners
+- registering commands
+- integrating enchantments into Paper's registry system
+
+## Next steps
+
+This quick start showed the complete Reedwork workflow.
+
+Continue with the individual guides to learn each feature in detail:
+
+- [Dependency Injection](../dependency-injection/)
+- [Commands](../commands/)
+- [Events](../events/)
+- [Enchantments](../enchantments/)
+- [Utilities](../utilities/)
+
+The complete runnable example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.

@@ -1,5 +1,6 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 
 import icon from 'astro-icon';
@@ -7,9 +8,10 @@ import icon from 'astro-icon';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
-    site: 'https://reedworkmc.github.io/Reedwork',
+    site: 'https://reedworkmc.github.io/',
 
     integrations: [
+        sitemap(),
         starlight({
             title: 'Reedwork',
             description:
@@ -40,12 +42,12 @@ export default defineConfig({
                         {label: 'Events', slug: 'features/events'},
                         {label: 'Enchantments', slug: 'features/enchantments'},
                         {label: 'Dependency Injection', slug: 'features/dependency-injection'},
-                        {label: 'Utilities', slug: 'features/utilities'},
                     ],
                 },
                 {
                     label: 'Utilities',
                     items: [
+                        {label: 'Overview', slug: 'utilities'},
                         {label: 'Bedrock Utils', slug: 'utilities/bedrock-utils'},
                         {label: 'Bukkit to String', slug: 'utilities/bukkit-to-string'},
                         {label: 'Color Utils', slug: 'utilities/color-utils'},

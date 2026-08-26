@@ -1,6 +1,6 @@
 ---
-title: Enchantments
-description: Define and automatically register custom Minecraft enchantments with Reedwork.
+title: Custom Enchantments for PaperMC Plugins | Reedwork
+description: Create and automatically register custom Minecraft enchantments in PaperMC plugins with Reedwork using CustomEnchantment, bootstrap scanning, and Paper's registry system.
 ---
 
 import {Code} from "@astrojs/starlight/components";
@@ -9,23 +9,23 @@ import {getExample} from "@lib/github";
 export const enchantmentCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/ReedworkEnchantment.java");
 export const bootstrapCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/EnchantmentExampleBootstrap.java");
 
-# Enchantments
+# Custom Enchantments for PaperMC Plugins
 
-Reedwork lets you define custom Minecraft enchantments as regular Java classes.
+Reedwork lets you define **custom Minecraft enchantments as regular Java classes** and automatically register them through Paper's bootstrap lifecycle.
 
-Instead of manually constructing registry entries, Reedwork discovers `CustomEnchantment` implementations and registers them during Paper's bootstrap phase.
+Instead of manually constructing registry entries, you define a `CustomEnchantment`, annotate it with `@Enchantment`, and let Reedwork discover and register it during the Paper bootstrap phase.
 
-The system has three simple parts:
+The process has three main parts:
 
-- `@Enchantment` defines the enchantment's identity.
-- `CustomEnchantment` defines its properties.
-- `Reedwork.bootstrap(...).scan(...)` discovers and registers it.
+- `@Enchantment` defines the enchantment key.
+- `CustomEnchantment` defines the enchantment properties.
+- `Reedwork.bootstrap(...).scan(...)` discovers and registers the enchantment.
 
-## Defining an enchantment
+## Define a custom enchantment
 
-The complete enchantment is defined by a single Java class.
+A custom enchantment is defined as a regular Java class.
 
-The `@Enchantment` annotation defines the enchantment key:
+The `@Enchantment` annotation defines the key used to identify the enchantment:
 
 <Code lang="java" mark="@Enchantment" code={`
 @Enchantment("reedworkpower")
@@ -33,24 +33,24 @@ public final class ReedworkEnchantment implements CustomEnchantment {
     // ...
 }`} />
 
-The annotation identifies the enchantment for Reedwork.
+The key identifies the enchantment within the Minecraft registry system.
 
-The implementation of `CustomEnchantment` then provides the properties required for the generated Minecraft enchantment.
+The `CustomEnchantment` implementation then provides the properties used to construct the corresponding Paper enchantment registry entry.
 
-## Enchantment properties
+## Configure enchantment properties
 
-`CustomEnchantment` provides the configuration used to create the enchantment registry entry.
+`CustomEnchantment` provides the configuration used to create the enchantment.
 
-| Method | Description |
-| --- | --- |
-| `description()` | Defines the enchantment description. |
-| `supportedItems()` | Defines which item types support the enchantment. |
-| `anvilCost()` | Defines the anvil cost. |
-| `maxLevel()` | Defines the maximum enchantment level. |
-| `weight()` | Defines the enchantment weight. |
-| `minimumCost()` | Defines the minimum enchantment cost. |
-| `maximumCost()` | Defines the maximum enchantment cost. |
-| `activeSlots()` | Defines the equipment slots in which the enchantment is active. |
+| Method             | Description                                                     |
+|--------------------|-----------------------------------------------------------------|
+| `description()`    | Defines the enchantment description.                            |
+| `supportedItems()` | Defines which item types support the enchantment.               |
+| `anvilCost()`      | Defines the anvil cost.                                         |
+| `maxLevel()`       | Defines the maximum enchantment level.                          |
+| `weight()`         | Defines the enchantment weight.                                 |
+| `minimumCost()`    | Defines the minimum enchantment cost.                           |
+| `maximumCost()`    | Defines the maximum enchantment cost.                           |
+| `activeSlots()`    | Defines the equipment slots in which the enchantment is active. |
 
 For example, the example enchantment is restricted to the `DIRT` item tag:
 
@@ -68,7 +68,7 @@ public int maxLevel() {
     return 1;
 }`} />
 
-And `activeSlots()` determines where the enchantment is active:
+The equipment slots in which the enchantment is active are defined by `activeSlots()`:
 
 <Code lang="java" mark="activeSlots" code={`
 @Override
@@ -76,11 +76,11 @@ public EquipmentSlotGroup activeSlots() {
     return EquipmentSlotGroup.ANY;
 }`} />
 
-The remaining methods work the same way: Reedwork takes the values returned by the implementation and uses them when constructing the corresponding Paper enchantment registry entry.
+The remaining methods work in the same way. Reedwork takes the values returned by the implementation and uses them when creating the corresponding Minecraft enchantment registry entry.
 
-## Bootstrap registration
+## Register enchantments during Paper bootstrap
 
-Custom enchantments are registry-backed Minecraft data and therefore need to be created during Paper's bootstrap lifecycle.
+Custom enchantments are registry-backed Minecraft data and therefore need to be created during the appropriate Paper bootstrap lifecycle.
 
 The example uses a `PluginBootstrap`:
 
@@ -99,13 +99,13 @@ public void bootstrap(final BootstrapContext context) {
 
 The `scan` call discovers the `@Enchantment` component and registers it with the Minecraft registry.
 
-No manual registry construction or registration is required.
+No manual registry construction or registration call is required.
 
-## Plugin configuration
+## Configure the Paper plugin bootstrapper
 
-Because the enchantment is registered during Paper's bootstrap phase, the plugin declares its bootstrapper in `paper-plugin.yml`:
+Because the custom enchantment is registered during Paper's bootstrap phase, the plugin declares its bootstrapper in `paper-plugin.yml`:
 
-<Code lang="yaml" mark="bootstrapper" code={`
+<Code title="paper-plugin.yml" lang="yaml" mark="bootstrapper" code={`
 name: EnchantmentExample
 version: '\${version}'
 
@@ -117,29 +117,69 @@ load: POSTWORLD
 
 The `bootstrapper` entry points to the class implementing `PluginBootstrap`.
 
-This allows Paper to invoke `EnchantmentExampleBootstrap` during the bootstrap phase, before the normal plugin lifecycle begins.
+Paper can then invoke `EnchantmentExampleBootstrap` during the bootstrap phase, before the normal plugin lifecycle begins.
 
-## The result
+This is important for registry-backed content because the enchantment must be created at the appropriate point in the Paper lifecycle.
+
+## How Reedwork registers the enchantment
+
+The complete flow is:
+
+```text
+@Enchantment
+       ↓
+CustomEnchantment
+       ↓
+Reedwork.bootstrap(context)
+       ↓
+Package scanning
+       ↓
+Minecraft registry entry
+```
 
 The enchantment itself remains a regular Java class:
 
 <Code title="ReedworkEnchantment.java" lang="java" code={enchantmentCode}/>
 
-The bootstrapper only needs to initialize Reedwork and scan the appropriate package.
+The bootstrapper initializes Reedwork and scans the package containing the enchantment.
 
-Reedwork handles the discovery and registry integration.
+Reedwork then discovers the annotated component and handles the registry integration.
 
-You define the **enchantment**.
+You define the **enchantment and its properties**.
 
-Reedwork handles the **Minecraft registry machinery**.
+Reedwork handles the **discovery and registry integration**.
 
-## Next steps
+## Why use Reedwork for custom enchantments?
 
-Now that you understand Reedwork's registry-backed enchantments, explore the other systems:
+Registering custom Minecraft enchantments involves more than defining an enchantment class. The enchantment also has to be created at the appropriate point in Paper's bootstrap lifecycle and integrated with Minecraft's registry system.
 
-- [Commands](../commands/)
-- [Events](../events/)
-- [Dependency Injection](../dependency-injection/)
-- [Utilities](../utilities/)
+Reedwork moves that infrastructure into a small, declarative API.
 
-The complete runnable enchantment example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
+Your enchantment implementation describes:
+
+- its registry key
+- supported items
+- maximum level
+- anvil cost
+- weight
+- level costs
+- active equipment slots
+
+The bootstrapper only needs to initialize Reedwork and scan the relevant package.
+
+This keeps the enchantment definition separate from the registry and bootstrap infrastructure.
+
+## Custom enchantments in a Reedwork plugin
+
+Custom enchantments are one of several Paper plugin systems supported by Reedwork.
+
+You can combine them with [dependency injection](../dependency-injection/) and other Reedwork-managed components when building a larger plugin.
+
+Explore the other systems:
+
+- [Commands](../commands/) — build PaperMC commands with Java annotations and automatic parameter resolution.
+- [Events](../events/) — automatically discover and register Bukkit and Paper event listeners.
+- [Dependency Injection](../dependency-injection/) — resolve services and other dependencies through constructors.
+- [Utilities](/utilities/) — use reusable utilities for Paper plugin development.
+
+The complete runnable custom enchantment example is available in the [ReedworkExamples repository](https://github.com/ReedworkMC/ReedworkExamples).

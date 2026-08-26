@@ -1,25 +1,23 @@
 ---
-title: BukkitToString
-description: Convert common Bukkit objects into compact human-readable strings with Reedwork.
+title: Format Bukkit Objects as Strings | Reedwork
+description: Format Bukkit locations, worlds, vectors, blocks, items, entities, players, and materials as readable strings with Reedwork.
 ---
 
 import {Code} from "@astrojs/starlight/components";
 
-# BukkitToString
+# Format Bukkit Objects as Strings
 
-`BukkitToString` provides small formatting utilities for converting common Bukkit objects into readable strings.
+`BukkitToString` provides formatting utilities for converting common **Bukkit objects into compact, human-readable strings**.
 
-It is useful for messages, command output, logging, debugging, and other situations where a Bukkit object needs to be represented as text.
+It is useful for PaperMC plugin messages, command output, logging, debugging, and other situations where Bukkit data needs to be displayed as text.
 
-The utility does not serialize objects into a reversible format. It produces compact, human-readable representations.
+The utility produces readable representations of selected object properties. It does not serialize objects into a reversible format.
 
 ## Locations
 
-Locations can be formatted either as block coordinates or with their exact coordinates and rotation.
-
 ### `formatLocation(Location location)`
 
-Returns the world name and block coordinates:
+Formats a location using its world name and block coordinates:
 
 <Code lang="java" code={`
 String location = BukkitToString.formatLocation(player.getLocation());
@@ -27,15 +25,13 @@ String location = BukkitToString.formatLocation(player.getLocation());
 
 Example output:
 
-```text
-world 120 64 -35
-```
+<Code lang="text" code={`world 120 64 -35`} />
 
-The X, Y, and Z values are obtained from the block coordinates of the location.
+The X, Y, and Z values are taken from the location's block coordinates.
 
 ### `formatLocationDetailed(Location location)`
 
-Returns the world, exact coordinates, yaw, and pitch:
+Formats a location using its world name, exact coordinates, yaw, and pitch:
 
 <Code lang="java" code={`
 String location = BukkitToString.formatLocationDetailed(player.getLocation());
@@ -43,17 +39,15 @@ String location = BukkitToString.formatLocationDetailed(player.getLocation());
 
 Example output:
 
-```text
-world 120.5 64.0 -35.25 yaw:90.0 pitch:12.5
-```
+<Code lang="text" code={`world 120.5 64.0 -35.25 yaw:90.0 pitch:12.5`} />
 
-This format is useful when the exact position and player or entity rotation are relevant.
+Use this format when exact coordinates or rotation are relevant.
 
 ## Worlds
 
 ### `formatWorld(World world)`
 
-Returns the world's name:
+Returns the Bukkit world's name:
 
 <Code lang="java" code={`
 String worldName = BukkitToString.formatWorld(player.getWorld());
@@ -61,17 +55,13 @@ String worldName = BukkitToString.formatWorld(player.getWorld());
 
 Example output:
 
-```text
-world
-```
-
-This is useful when a `World` needs to be represented as text.
+<Code lang="text" code={`world`} />
 
 ## Vectors
 
 ### `formatVector(Vector vector)`
 
-Formats a Bukkit `Vector` as three space-separated coordinates:
+Formats a Bukkit `Vector` using its X, Y, and Z coordinates:
 
 <Code lang="java" code={`
 String vector = BukkitToString.formatVector(direction);
@@ -79,9 +69,7 @@ String vector = BukkitToString.formatVector(direction);
 
 Example output:
 
-```text
-0.0 1.0 -1.0
-```
+<Code lang="text" code={`0.0 1.0 -1.0`} />
 
 ## Blocks
 
@@ -95,17 +83,15 @@ String block = BukkitToString.formatBlock(player.getLocation());
 
 Example output:
 
-```text
-STONE at world 120 64 -35
-```
+<Code lang="text" code={`STONE at world 120 64 -35`} />
 
-The block type is followed by the formatted block location.
+The block type is combined with the formatted block location.
 
 ## Materials
 
 ### `formatMaterial(Material material)`
 
-Converts a Bukkit `Material` into its lowercase name:
+Converts a Bukkit `Material` into its lowercase enum name:
 
 <Code lang="java" code={`
 String material = BukkitToString.formatMaterial(Material.DIAMOND_SWORD);
@@ -113,11 +99,9 @@ String material = BukkitToString.formatMaterial(Material.DIAMOND_SWORD);
 
 Example output:
 
-```text
-diamond_sword
-```
+<Code lang="text" code={`diamond_sword`} />
 
-This is useful when a Bukkit material should be displayed without the uppercase enum representation.
+This is useful when a Bukkit material should be displayed without the uppercase Java enum representation.
 
 ## Items
 
@@ -131,17 +115,13 @@ String item = BukkitToString.formatItem(itemStack);
 
 For a normal item, the output looks like:
 
-```text
-3x diamond
-```
+<Code lang="text" code={`3x diamond`} />
 
-Air items and `null` values are represented as:
+`null` values and air items are represented as:
 
-```text
-air
-```
+<Code lang="text" code={`air`} />
 
-This makes the method useful for empty inventory slots and other situations where an item may not exist.
+This makes the method useful when formatting inventory contents or other potentially empty item values.
 
 ## Entities
 
@@ -155,9 +135,7 @@ String entity = BukkitToString.formatEntity(entity);
 
 Example output:
 
-```text
-zombie at world 120 64 -35
-```
+<Code lang="text" code={`zombie at world 120 64 -35`} />
 
 The entity type is converted to lowercase and combined with its formatted location.
 
@@ -173,17 +151,15 @@ String player = BukkitToString.formatPlayer(player);
 
 Example output:
 
-```text
-Steve at world 120 64 -35
-```
+<Code lang="text" code={`Steve at world 120 64 -35`} />
 
-This is useful for compact player-related messages and logging.
+This is useful for compact player-related messages and log output.
 
 ## Rotation
 
 ### `formatRotation(Location location)`
 
-Formats the yaw and pitch of a location:
+Formats the yaw and pitch stored in a location:
 
 <Code lang="java" code={`
 String rotation = BukkitToString.formatRotation(player.getLocation());
@@ -191,11 +167,9 @@ String rotation = BukkitToString.formatRotation(player.getLocation());
 
 Example output:
 
-```text
-yaw:90.0 pitch:12.5
-```
+<Code lang="text" code={`yaw:90.0 pitch:12.5`} />
 
-Unlike `formatLocationDetailed`, this method only contains the rotation values.
+Unlike `formatLocationDetailed`, this method only includes rotation.
 
 ## API
 
@@ -203,153 +177,104 @@ Unlike `formatLocationDetailed`, this method only contains the rotation values.
 
 Formats a location using its world name and block coordinates.
 
-**Parameters:**
-
-| Parameter | Type | Description |
-| --- | --- | --- |
+| Parameter  | Type       | Description             |
+|------------|------------|-------------------------|
 | `location` | `Location` | The location to format. |
 
-**Returns:**
-
-A string containing the world name and block coordinates.
+Returns a string containing the world name and block coordinates.
 
 ### `formatLocationDetailed(Location location)`
 
 Formats a location using its world name, exact coordinates, yaw, and pitch.
 
-**Parameters:**
-
-| Parameter | Type | Description |
-| --- | --- | --- |
+| Parameter  | Type       | Description             |
+|------------|------------|-------------------------|
 | `location` | `Location` | The location to format. |
 
-**Returns:**
-
-A string containing the world, exact coordinates, yaw, and pitch.
+Returns a string containing the world, exact coordinates, yaw, and pitch.
 
 ### `formatWorld(World world)`
 
 Formats a world using its Bukkit name.
 
-**Parameters:**
+| Parameter | Type    | Description          |
+|-----------|---------|----------------------|
+| `world`   | `World` | The world to format. |
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `world` | `World` | The world to format. |
-
-**Returns:**
-
-The world's name.
+Returns the world's name.
 
 ### `formatVector(Vector vector)`
 
 Formats a vector using its X, Y, and Z coordinates.
 
-**Parameters:**
+| Parameter | Type     | Description           |
+|-----------|----------|-----------------------|
+| `vector`  | `Vector` | The vector to format. |
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `vector` | `Vector` | The vector to format. |
-
-**Returns:**
-
-A space-separated string containing the vector coordinates.
+Returns a space-separated string containing the vector coordinates.
 
 ### `formatBlock(Location location)`
 
 Formats the block at the specified location together with its block position.
 
-**Parameters:**
-
-| Parameter | Type | Description |
-| --- | --- | --- |
+| Parameter  | Type       | Description                |
+|------------|------------|----------------------------|
 | `location` | `Location` | The location of the block. |
 
-**Returns:**
-
-A string containing the block type and formatted location.
+Returns a string containing the block type and formatted location.
 
 ### `formatMaterial(Material material)`
 
 Formats a Bukkit material using its lowercase enum name.
 
-**Parameters:**
-
-| Parameter | Type | Description |
-| --- | --- | --- |
+| Parameter  | Type       | Description             |
+|------------|------------|-------------------------|
 | `material` | `Material` | The material to format. |
 
-**Returns:**
-
-The lowercase material name.
+Returns the lowercase material name.
 
 ### `formatItem(ItemStack item)`
 
 Formats an item using its amount and material.
 
-**Parameters:**
+| Parameter | Type        | Description         |
+|-----------|-------------|---------------------|
+| `item`    | `ItemStack` | The item to format. |
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `item` | `ItemStack` | The item to format. |
-
-**Returns:**
-
-The formatted item, or `air` when the item is `null` or an air item.
+Returns the formatted item, or `air` when the item is `null` or an air item.
 
 ### `formatEntity(Entity entity)`
 
 Formats an entity using its type and block location.
 
-**Parameters:**
+| Parameter | Type     | Description           |
+|-----------|----------|-----------------------|
+| `entity`  | `Entity` | The entity to format. |
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `entity` | `Entity` | The entity to format. |
-
-**Returns:**
-
-A string containing the entity type and location.
+Returns a string containing the entity type and location.
 
 ### `formatPlayer(Player player)`
 
 Formats a player using their name and block location.
 
-**Parameters:**
+| Parameter | Type     | Description           |
+|-----------|----------|-----------------------|
+| `player`  | `Player` | The player to format. |
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `player` | `Player` | The player to format. |
-
-**Returns:**
-
-A string containing the player's name and location.
+Returns a string containing the player's name and location.
 
 ### `formatRotation(Location location)`
 
 Formats the yaw and pitch of a location.
 
-**Parameters:**
-
-| Parameter | Type | Description |
-| --- | --- | --- |
+| Parameter  | Type       | Description                           |
+|------------|------------|---------------------------------------|
 | `location` | `Location` | The location containing the rotation. |
 
-**Returns:**
+Returns a string containing the yaw and pitch.
 
-A string containing the yaw and pitch.
+## Related utilities
 
-## Summary
+For more PaperMC and Bukkit utilities, see the [Reedwork utility collection](../).
 
-`BukkitToString` provides a consistent way to convert frequently used Bukkit objects into readable strings.
-
-It is especially useful for:
-
-- command feedback;
-- player messages;
-- logging;
-- debugging;
-- readable event output;
-- displaying Bukkit objects without manually formatting their properties.
-
-The methods only format selected Bukkit properties and do not perform object serialization.
+For color formatting and Adventure components, see [Color Utilities](../color-utils/).

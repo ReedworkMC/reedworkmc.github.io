@@ -1,6 +1,6 @@
 ---
-title: Installation
-description: Learn how to install Reedwork in your PaperMC plugin.
+title: Install Reedwork for PaperMC Plugins
+description: Add Reedwork to your PaperMC plugin project using Maven or Gradle and start building plugins with dependency injection, commands, events, and custom enchantments.
 ---
 
 import {FileTree, Code, Steps, Badge} from '@astrojs/starlight/components';
@@ -11,23 +11,44 @@ import AstroTabs from '../../../components/AstroTabs.astro';
 export const release = await getLatestReedworkRelease();
 export const { version, downloadUrl, jarName } = release;
 
-Reedwork is distributed as a JAR through GitHub Releases.
+# Install Reedwork
 
-## Download
+Reedwork is a Java framework for building PaperMC plugins with automatic component discovery, dependency injection, command generation, event registration, and custom Minecraft registry integration.
 
-The latest release is **{version}**.
+This guide explains how to add Reedwork as a dependency to an existing Paper plugin project.
+
+## Requirements
+
+Before installing Reedwork, make sure your project already has:
+
+- a working PaperMC plugin project
+- Java support matching your Paper version
+- a build system using Maven or Gradle
+
+Reedwork is distributed as a JAR file through GitHub Releases.
+
+## Download Reedwork
+
+The latest Reedwork release is **{version}**.
 
 <a href={downloadUrl}>Download {jarName}</a> or visit the [GitHub Releases](https://github.com/ReedworkMC/Reedwork/releases/latest) page.
 
-## Install <Badge text="Recommended" variant="note" />
+## Recommended installation: Maven local repository
 
-This installation only needs to be performed once for each Reedwork version.
+<Badge text="Recommended" variant="note" />
 
-The recommended approach is to install the Reedwork JAR into your local Maven repository and then use the normal Maven coordinates from your build system.
+The recommended installation method is adding Reedwork to your local Maven repository.
+
+This keeps the Reedwork JAR separate from your plugin source code and allows Maven and Gradle to resolve the dependency using standard coordinates.
+
+Install the downloaded JAR:
 
 <Steps>
 1.
-    Download the latest Reedwork JAR and install it into your local Maven repository.
+    Download the latest Reedwork JAR.
+
+2.
+    Install the file into your local Maven repository:
 
     <Code lang="bash" code={`
 mvn install:install-file \
@@ -39,16 +60,21 @@ mvn install:install-file \
 `}
     />
 
-    Maven installs the artifact into your local repository, normally located at `~/.m2/repository`.
+    Maven stores the artifact in your local repository, normally:
 
-    After the installation succeeds, the downloaded JAR is no longer required and can be removed.
+    <Code lang="text" code={`
+    ~/.m2/repository
+    `} />
 
-2.
-    Add Reedwork as a dependency to your project.
+    After installation, the downloaded JAR is no longer required.
+
+3.
+    Add Reedwork as a dependency.
 
     <AstroTabs>
         <AstroTabItem label="Maven" icon="mdi:console">
-            Add Reedwork to your `pom.xml`:
+
+    Add the dependency to `pom.xml`:
 
             <Code lang="xml" code={`
     <dependency>
@@ -60,7 +86,7 @@ mvn install:install-file \
         </AstroTabItem>
 
         <AstroTabItem label="Gradle Groovy" icon="mdi:console">
-            Make sure your `build.gradle` includes `mavenLocal()`:
+            Ensure `mavenLocal()` is available:
 
             <Code lang="groovy" code={`
     repositories {
@@ -72,11 +98,11 @@ mvn install:install-file \
     }`}
             />
 
-            `mavenLocal()` allows Gradle to resolve the Reedwork artifact installed in the local Maven repository.
+            `mavenLocal()` allows Gradle to resolve the Reedwork artifact from the local Maven repository.
         </AstroTabItem>
 
         <AstroTabItem label="Gradle Kotlin DSL" icon="mdi:console">
-            Make sure your `build.gradle.kts` includes `mavenLocal()`:
+            Ensure `mavenLocal()` is available:
 
             <Code lang="kotlin" code={`
     repositories {
@@ -88,20 +114,30 @@ mvn install:install-file \
     }`}
             />
 
-            `mavenLocal()` allows Gradle to resolve the Reedwork artifact installed in the local Maven repository.
+            `mavenLocal()` allows Gradle to resolve the Reedwork artifact from the local Maven repository.
         </AstroTabItem>
     </AstroTabs>
+
 </Steps>
 
-## Legacy Install <Badge text="Legacy" variant="caution" />
+## Legacy installation: include the JAR in your project
 
-The legacy installation keeps the Reedwork JAR directly inside your plugin project instead of installing it into the local Maven repository.
+<Badge text="Legacy" variant="caution" />
 
-This can be useful when you do not want to install Reedwork into a local Maven repository.
+The legacy approach stores the Reedwork JAR directly inside your plugin project.
+
+This method can be useful when the dependency should be bundled with the project structure.
+
+However, the Maven repository installation is preferred for normal development.
+
 
 <Steps>
 1.
-    Place the downloaded JAR in the `libs` directory of your plugin project:
+    Download the latest Reedwork JAR.
+
+
+2.
+    Place the downloaded JAR into your plugin project:
 
     <FileTree>
         - my-plugin
@@ -112,12 +148,13 @@ This can be useful when you do not want to install Reedwork into a local Maven r
             - ...
     </FileTree>
 
-2.
-    Add the local JAR as a dependency.
+3.
+    Add the dependency configuration:
 
     <AstroTabs>
         <AstroTabItem label="Maven" icon="mdi:console">
-            Add Reedwork as a system-scoped dependency to your `pom.xml`:
+
+            Add a system dependency:
 
             <Code lang="xml" code={`
     <dependency>
@@ -133,7 +170,8 @@ This can be useful when you do not want to install Reedwork into a local Maven r
         </AstroTabItem>
 
         <AstroTabItem label="Gradle Groovy" icon="mdi:console">
-            Add the local JAR to your `build.gradle`:
+
+            Add the local file dependency:
 
             <Code lang="groovy" code={`
     dependencies {
@@ -145,7 +183,8 @@ This can be useful when you do not want to install Reedwork into a local Maven r
         </AstroTabItem>
 
         <AstroTabItem label="Gradle Kotlin DSL" icon="mdi:console">
-            Add the local JAR to your `build.gradle.kts`:
+
+            Add the local file dependency:
 
             <Code lang="kotlin" code={`
     dependencies {
@@ -154,20 +193,43 @@ This can be useful when you do not want to install Reedwork into a local Maven r
             />
 
             The JAR must be located at `libs/{jarName}` relative to the project root.
+
         </AstroTabItem>
     </AstroTabs>
 </Steps>
 
-## Which installation should I use?
 
-The **local Maven installation** is recommended for normal development.
+## Choosing an installation method
 
-It keeps the Reedwork JAR outside your project and allows Maven and Gradle to use the same Maven coordinates.
+For most PaperMC plugin projects, use the local Maven installation.
 
-The **legacy installation** is useful when the JAR should remain part of the project itself.
+Advantages:
 
-## Next Steps
+- standard Maven coordinates
+- works with Maven and Gradle
+- keeps dependency management clean
+- avoids project-local binary files
 
-Reedwork is now available as a dependency in your project.
+The legacy `libs` approach is mainly useful for projects where the Reedwork JAR must remain directly inside the repository.
 
-Continue with the [Quick Start](/getting-started/quick-start/) to create your first Reedwork-powered Paper plugin.
+## Verify the installation
+
+After adding Reedwork, your project should be able to import Reedwork classes:
+
+<Code lang="java" code={`
+import dev.reedworkmc.reedwork.Reedwork;
+`} />
+
+You can now initialize Reedwork and start using features such as:
+
+- [Dependency Injection](../dependency-injection/)
+- [Events](../events/)
+- [Commands](../commands/)
+- [Enchantments](../enchantments/)
+- [Utilities](/utilities/)
+
+## Next steps
+
+Reedwork is now installed in your PaperMC plugin project.
+
+Continue with the [Quick Start](/getting-started/quick-start/) guide to create your first Reedwork-powered plugin.

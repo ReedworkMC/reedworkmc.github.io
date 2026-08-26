@@ -1,6 +1,6 @@
 ---
-title: Dependency Injection
-description: Automatically resolve and manage dependencies across Reedwork components.
+title: Dependency Injection for PaperMC Plugins | Reedwork
+description: Add dependency injection to PaperMC plugins with constructor injection, singleton and transient components, external bindings, factories, and named dependencies.
 ---
 
 import {Code} from "@astrojs/starlight/components";
@@ -11,53 +11,85 @@ export const counterCode = await getExample("DependencyInjectionExample/src/main
 export const greeterCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/GreeterService.java");
 export const commandCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/commands/ReedworkCommand.java");
 
-# Dependency Injection
+# Dependency Injection for PaperMC Plugins
 
-Reedwork includes a dependency injection system that allows components to receive their dependencies automatically through their constructors.
+Reedwork provides **dependency injection for PaperMC plugins**, allowing Java components to receive their dependencies automatically through constructor injection.
 
-Instead of manually creating service instances and passing them through your application, you declare the dependencies your component needs and Reedwork resolves them when the component is created.
+Instead of manually creating services and passing them between commands, event listeners, and other plugin components, you declare what a component needs and Reedwork resolves the dependency graph when the component is created.
 
-For example, a command can simply declare its required services in its constructor:
+This keeps your Paper plugin architecture modular while keeping dependencies explicit in ordinary Java constructors.
+
+## Constructor injection
+
+The primary way to use dependency injection in Reedwork is constructor injection.
+
+A component declares the services it requires in its constructor:
 
 <Code title="ReedworkCommand.java" lang="java" code={commandCode}/>
 
-Reedwork resolves `GreeterService`, `ExecuteCounter`, and `FileFromExternalLib` automatically.
+In this example, Reedwork resolves `GreeterService`, `ExecuteCounter`, and `FileFromExternalLib` when it creates `ReedworkCommand`.
+
+The command does not need to create those objects itself or retrieve them from a service locator.
+
+The constructor documents the dependencies directly:
+
+```
+ReedworkCommand
+├── GreeterService
+├── ExecuteCounter
+└── FileFromExternalLib
+```
+
+This makes dependencies visible in the Java type structure of your Paper plugin.
 
 ## Component lifecycles
 
-Reedwork supports different lifecycles for components.
+Reedwork supports different lifecycles for dependency-injected components.
 
-The two component annotations are `@Singleton` and `@Transient`.
+The two component annotations are:
 
-### Singleton
+- `@Singleton`
+- `@Transient`
 
-A `@Singleton` component is created once and the same instance is reused whenever the component is injected.
+The lifecycle determines how Reedwork creates and reuses component instances.
+
+## Singleton components
+
+A `@Singleton` component is created once and the same instance is reused whenever that component is injected.
 
 For example:
 
 <Code title="ExecuteCounter.java" lang="java" mark="@Singleton" code={counterCode}/>
 
-`ExecuteCounter` is created once and can maintain state across multiple command executions.
+`ExecuteCounter` can therefore maintain state across multiple command executions.
 
-Because its constructor requires `FileFromExternalLib`, Reedwork also resolves that dependency automatically.
+Its constructor can also declare dependencies:
 
-### Transient
+<Code title="ExecuteCounter.java" lang="java" mark="FileFromExternalLib" code={counterCode}/>
+
+Reedwork resolves those dependencies as part of creating the singleton component.
+
+Use a singleton when the same component instance should be shared across the parts of your plugin that depend on it.
+
+## Transient components
 
 A `@Transient` component creates a new instance whenever Reedwork resolves it.
 
+For example:
+
 <Code title="GreeterService.java" lang="java" mark="@Transient" code={greeterCode}/>
 
-`GreeterService` does not maintain any state, so a new instance can be created for each injection.
+Transient components are useful when each resolution should receive a separate instance rather than sharing one object.
 
-This is useful for lightweight services where sharing a single instance is not required.
+The lifecycle is part of the dependency configuration, so you can choose whether a component should be shared or recreated.
 
 ## Binding external classes
 
 Not every dependency needs to be a Reedwork component.
 
-External classes can be registered manually through the Reedwork builder.
+You can register external classes manually through the Reedwork builder.
 
-For example, the example project uses a class from an external library:
+For example, an external library might provide a class that cannot be annotated with Reedwork:
 
 <Code lang="java" code={`
 public final class FileFromExternalLib {
@@ -80,7 +112,7 @@ public final class FileFromExternalLib {
 
 The class does not need a Reedwork annotation.
 
-Instead, it can be registered explicitly:
+Instead, you can explicitly bind an instance:
 
 <Code lang="java" mark="toSingleton" code={`
 Reedwork.create(this)
@@ -89,9 +121,11 @@ Reedwork.create(this)
     .scan("dev.reedworkmc.examples.dependencyinjection");
 `} />
 
-This registers the supplied instance as a singleton.
+The supplied instance is registered as a singleton.
 
-Whenever `FileFromExternalLib` is injected, Reedwork provides the same instance.
+Whenever `FileFromExternalLib` is injected through this binding, Reedwork provides the registered instance.
+
+This is useful for dependencies that come from external libraries or objects that need to be configured before they enter the dependency graph.
 
 ## Transient bindings
 
@@ -106,7 +140,7 @@ Reedwork.create(this)
 
 With `to(...)`, Reedwork creates a new instance whenever the dependency is resolved.
 
-This is useful when the dependency should not be shared between components.
+This lets external classes participate in dependency injection without requiring Reedwork-specific annotations.
 
 ## Factory bindings
 
@@ -121,11 +155,15 @@ Reedwork.create(this)
 
 The factory is invoked whenever Reedwork needs to resolve the dependency.
 
-This is useful when the construction of a dependency requires custom logic or dynamic values.
+Factory bindings are useful when creating an object requires custom construction logic, dynamic values, or an object that cannot be created through a simple constructor binding.
+
+This gives you control over object creation while keeping the resulting dependency available through constructor injection.
 
 ## Named bindings
 
-Reedwork also supports multiple bindings of the same Java type.
+Sometimes a Paper plugin needs multiple dependencies of the same Java type.
+
+Reedwork supports this through named bindings.
 
 A binding can be assigned a name using `.named(String)`:
 
@@ -153,13 +191,24 @@ public ReedworkService(
 }
 `} />
 
-The name becomes part of the dependency lookup, allowing multiple instances of the same type to be injected into the same component.
+The name becomes part of the dependency lookup.
 
-## Constructor injection
+This allows multiple bindings of the same Java type to coexist in the same dependency container.
 
-Reedwork resolves constructor parameters automatically.
+For example, the constructor above receives two different `FileFromExternalLib` bindings:
 
-For example:
+```text
+first  → FileFromExternalLib(10)
+second → FileFromExternalLib(20)
+```
+
+Named bindings are useful when the Java type alone is not enough to distinguish between multiple implementations or instances.
+
+## How dependency resolution works
+
+When Reedwork creates a component, it examines its constructor and resolves the required parameters from the dependency container.
+
+Consider this command:
 
 <Code lang="java" mark="ReedworkCommand" code={`
 public ReedworkCommand(
@@ -172,9 +221,7 @@ public ReedworkCommand(
     this.fileFromExternalLib = fileFromExternalLib;
 }`} />
 
-When Reedwork creates `ReedworkCommand`, it resolves each constructor parameter from the dependency container.
-
-The dependency graph in this example looks like:
+The resulting dependency graph is:
 
 ```text
 ReedworkCommand
@@ -184,39 +231,163 @@ ReedworkCommand
 └── FileFromExternalLib
 ```
 
-This means `FileFromExternalLib` is resolved independently for the command and for `ExecuteCounter`, while the exact instance behavior depends on how the binding is configured.
+Reedwork resolves the dependencies recursively.
 
-## The result
+`ReedworkCommand` requires `ExecuteCounter`, which itself requires `FileFromExternalLib`. Reedwork resolves that dependency as part of creating `ExecuteCounter`.
 
-Dependency injection keeps Reedwork components focused on their actual responsibilities.
+The exact instance reuse depends on the lifecycle or binding configured for each dependency.
 
-You declare what a component needs:
+## Dependency injection in Paper plugin components
+
+Dependency injection is not limited to services.
+
+Reedwork can inject dependencies into its managed components, including:
+
+- commands
+- event listeners
+- services
+- suggestion providers
+- other Reedwork-managed components
+
+For example, a [Reedwork command](../commands/) can depend directly on an application service:
 
 ```java
-public ReedworkCommand(
-        GreeterService greeterService,
-        ExecuteCounter executeCounter,
-        FileFromExternalLib fileFromExternalLib
-) {
-    // ...
+public final class HelloCommand {
+
+    private final GreeterService greeterService;
+
+    public HelloCommand(GreeterService greeterService) {
+        this.greeterService = greeterService;
+    }
 }
 ```
 
-Reedwork handles creating the objects and resolving their dependencies.
+The command declares its dependency without needing to construct `GreeterService` itself.
 
-This works across Reedwork-managed components such as commands, event listeners, and other injectable services.
+The same approach can be used when building [Paper event listeners](../events/) and other components managed by Reedwork.
 
-You define the **dependencies your component needs**.
+## Why use dependency injection in a PaperMC plugin?
 
-Reedwork handles the **dependency graph and object creation**.
+As a Paper plugin grows, components often need to communicate with shared services.
+
+Without dependency injection, this can lead to manual object creation and increasingly large constructors in plugin initialization code.
+
+For example, a plugin might have to manually create:
+
+```text
+GreeterService
+ExecuteCounter
+PlayerService
+DatabaseService
+Command instances
+Event listener instances
+```
+
+and then pass those objects into the components that require them.
+
+Dependency injection moves that wiring into the dependency container.
+
+Each component instead declares what it needs:
+
+```java
+public MyCommand(
+        PlayerService playerService,
+        DatabaseService databaseService
+) {
+    this.playerService = playerService;
+    this.databaseService = databaseService;
+}
+```
+
+The component remains responsible for its behavior.
+
+Reedwork is responsible for constructing and connecting the components.
+
+## Explicit dependencies improve plugin architecture
+
+Constructor injection has another benefit beyond reducing boilerplate: dependencies remain explicit.
+
+A class that requires `DatabaseService` shows that requirement directly in its constructor.
+
+There is no hidden global lookup such as:
+
+```java
+DatabaseService service = Services.get(DatabaseService.class);
+```
+
+Instead, the dependency is part of the component's Java API.
+
+This makes components easier to understand, test, and reuse.
+
+It also makes the dependency graph of a larger Paper plugin easier to reason about.
+
+## Registering the dependency container
+
+The dependency injection system is initialized when Reedwork is created and the plugin package is scanned.
+
+<Code title="DependencyInjectionExample.java" lang="java" code={pluginCode}/>
+
+The scan discovers Reedwork components in the configured package.
+
+Dependencies declared by those components can then be resolved through the configured bindings and component lifecycles.
+
+This keeps the initialization code in the plugin entry point small while the individual components remain responsible for their own behavior.
+
+## Choosing a component lifecycle
+
+The lifecycle should reflect how you want the component instance to behave.
+
+### Use `@Singleton` when
+
+- one shared instance should be used across the plugin
+- the component maintains state
+- creating multiple instances would be unnecessary
+- other components should observe the same component state
+
+### Use `@Transient` when
+
+- each resolution should create a new instance
+- the component should not be shared
+- the component is lightweight
+- instance-specific state should not be reused between consumers
+
+### Use a binding when
+
+- the class comes from an external library
+- the class cannot be annotated
+- an existing object should be supplied
+- custom construction logic is required
+- multiple implementations or instances need to be distinguished
+
+## The Reedwork approach
+
+Reedwork keeps dependency injection close to standard Java.
+
+You declare dependencies through constructors.
+
+You choose component lifecycles with `@Singleton` and `@Transient`.
+
+You can explicitly bind external classes when required.
+
+You can use factories for custom object creation.
+
+You can use named bindings when multiple dependencies share the same Java type.
+
+Reedwork handles the dependency graph and object creation.
+
+The result is a Paper plugin architecture where components describe **what they need** without taking responsibility for **how those dependencies are created**.
 
 ## Next steps
 
-Now that you understand dependency injection, explore the other Reedwork systems:
+Dependency injection becomes especially useful when combined with Reedwork's other plugin systems.
 
-- [Commands](../commands/)
-- [Events](../events/)
-- [Enchantments](../enchantments/)
-- [Utilities](../utilities/)
+Explore:
 
-The complete runnable dependency injection example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
+- [Commands](../commands/) — build PaperMC commands with Java annotations and automatic parameter resolution.
+- [Events](../events/) — automatically discover and register Bukkit and Paper event listeners.
+- [Enchantments](../enchantments/) — create and register custom Minecraft enchantments.
+- [Utilities](/utilities/) — use reusable utilities for Paper plugin development.
+
+If you are new to Reedwork, start with the [introduction](../../getting-started/introduction/) and then follow the [installation guide](../../getting-started/installation/).
+
+The complete runnable dependency injection example is available in the [ReedworkExamples repository](https://github.com/ReedworkMC/ReedworkExamples).

@@ -1,19 +1,19 @@
 ---
-title: ColorfulnessFinder
-description: Select the two most colorful Bukkit colors with Reedwork.
+title: Select Colorful Bukkit Colors | ColorfulnessFinder
+description: Select the two most colorful Bukkit colors using HSL saturation and lightness with Reedwork's ColorfulnessFinder utility.
 ---
 
 import {Code} from "@astrojs/starlight/components";
 
-# ColorfulnessFinder
+# Select Colorful Bukkit Colors with ColorfulnessFinder
 
-`ColorfulnessFinder` provides a small utility for selecting the two most colorful colors from a set of Bukkit `Color` values.
+`ColorfulnessFinder` is a small Reedwork utility for selecting the **two most colorful Bukkit `Color` values** from a collection of candidates.
 
-It is primarily useful when an application has multiple candidate colors and needs to determine which two provide the strongest visual signal.
+It evaluates each color using HSL saturation and lightness, ranks the candidates by its colorfulness score, and returns the two highest-scoring colors.
 
-The utility evaluates each color using its HSL saturation and lightness and returns the two colors with the highest resulting score.
+This is useful when an application needs to reduce a larger color palette to two visually strong colors.
 
-## Finding two signal colors
+## Find two signal colors
 
 ### `getTwoSignalColors(Color[] colors)`
 
@@ -35,7 +35,7 @@ Color second = signalColors[1];
 
 The method returns exactly two colors.
 
-The first result is the color with the highest colorfulness score, while the second result is the color with the second-highest score.
+The first result has the highest colorfulness score and the second result has the second-highest score.
 
 ## How colorfulness is calculated
 
@@ -47,15 +47,15 @@ The colorfulness score is calculated as:
 colorfulness = saturation × lightness
 ***
 
-Higher saturation increases the score, while lightness influences how strongly the color contributes to the result.
+Higher saturation increases the score, while lightness affects the resulting value.
 
-The colors are then sorted by this score in descending order.
+The candidate colors are then ordered by their score in descending order.
 
-The two colors at the top of the sorted list are returned.
+The two highest-scoring colors are returned.
 
 ## Example
 
-For example, given several colors:
+For example, given several candidate colors:
 
 <Code lang="java" code={`
 Color[] colors = {
@@ -68,17 +68,15 @@ Color[] colors = {
 Color[] result = ColorfulnessFinder.getTwoSignalColors(colors);
 `} />
 
-`result[0]` contains the most colorful candidate and `result[1]` contains the second-most colorful candidate according to the utility's colorfulness calculation.
+`result[0]` contains the highest-scoring candidate and `result[1]` contains the second-highest candidate according to the utility's colorfulness calculation.
 
-The method does not modify the input array.
+The input array is not modified.
 
-## Using it with ColorUtils
+## Use ColorfulnessFinder with ColorUtils
 
-`ColorfulnessFinder` is particularly useful together with `ColorUtils.extractTwoColors(...)`.
+`ColorfulnessFinder` is particularly useful together with [ColorUtils](../color-utils/).
 
-`extractTwoColors(...)` collects candidate colors from an image and uses `ColorfulnessFinder` to select the two strongest signal colors.
-
-The same operation can also be performed manually:
+For example, an application can first select two strong colors and then use them to generate an Adventure text gradient:
 
 <Code lang="java" code={`
 Color[] candidates = {
@@ -91,14 +89,19 @@ Color[] candidates = {
 Color[] signalColors =
     ColorfulnessFinder.getTwoSignalColors(candidates);
 
-Component gradient = ColorUtils.generateGradientText(
-    "Welcome!",
-    signalColors[0],
-    signalColors[1]
-);
+    Component gradient = ColorUtils.generateGradientText(
+        "Welcome!",
+        signalColors[0],
+        signalColors[1]
+    );
 `} />
 
-This makes `ColorfulnessFinder` useful as a small color-selection step before generating gradients or other visual effects.
+This separates the two operations:
+
+1. `ColorfulnessFinder` selects the strongest candidate colors.
+2. `ColorUtils` applies those colors to Adventure text.
+
+For image-based color extraction, see [`extractTwoColors`](../color-utils/#extract-colors-from-an-image) in [ColorUtils](../color-utils/).
 
 ## API
 
@@ -106,11 +109,11 @@ This makes `ColorfulnessFinder` useful as a small color-selection step before ge
 
 Finds the two colors with the highest colorfulness scores.
 
-**Parameters:**
-
 | Parameter | Type      | Description                       |
 |-----------|-----------|-----------------------------------|
 | `colors`  | `Color[]` | The candidate colors to evaluate. |
+
+The input array must contain at least two colors.
 
 **Returns:**
 
@@ -121,18 +124,29 @@ An array containing exactly two colors:
 | `0`   | The color with the highest colorfulness score.        |
 | `1`   | The color with the second-highest colorfulness score. |
 
-The input array must contain at least two colors.
+## When to use ColorfulnessFinder
+
+Use `ColorfulnessFinder` when your application already has multiple candidate colors and needs to select two visually strong colors.
+
+Typical use cases include:
+
+- reducing an image-derived color palette;
+- selecting colors for gradients;
+- generating dynamic UI colors;
+- choosing representative colors from a collection.
+
+For general Bukkit color operations, see [Color Utilities](../color-utils/).
 
 ## Summary
 
-`ColorfulnessFinder` provides a focused utility for selecting visually strong colors from a collection.
+`ColorfulnessFinder` provides a focused color-selection operation for Bukkit colors.
 
 It:
 
 - converts RGB colors into HSL;
 - calculates a colorfulness score from saturation and lightness;
-- sorts the candidate colors by that score;
+- ranks candidate colors by that score;
 - returns the two highest-scoring colors;
-- can be combined with `ColorUtils` for image-based gradients and other visual effects.
+- can be combined with `ColorUtils` for gradient generation.
 
-For image-based color extraction, see [Color Utilities](../color-utils/).
+For the complete collection of Reedwork utilities, see the [PaperMC Plugin Utilities](../).
