@@ -1,0 +1,167 @@
+---
+title: Introduction
+description: Learn what Reedwork is, how it works, and why it exists.
+---
+
+import {Code} from "@astrojs/starlight/components";
+
+# Reedwork
+
+Reedwork is a framework for building PaperMC plugins with less boilerplate.
+
+It provides annotation-driven component discovery, dependency injection, automatic event registration, command generation, custom enchantment registration, and other utilities for Paper plugin development.
+
+The goal is simple:
+
+**You describe what your plugin needs, and Reedwork handles the registration and infrastructure around it.**
+
+## Why Reedwork?
+
+Paper provides powerful APIs for building Minecraft plugins, but many plugin systems require repetitive setup code.
+
+Components need to be discovered and created.
+
+Event listeners need to be registered.
+
+Commands need to be constructed and registered.
+
+Dependencies need to be created and passed between classes.
+
+Registry-backed features such as custom enchantments need to be integrated into Paper's bootstrap lifecycle.
+
+Reedwork moves much of this infrastructure out of your plugin code.
+
+Instead of writing registration code for every component, you declare the component itself and let Reedwork handle the surrounding setup.
+
+## How Reedwork works
+
+Reedwork is built around three core concepts:
+
+- **Annotations** describe what a class represents.
+- **Scanning** discovers those classes automatically.
+- **Resolution and registration** connect the discovered components to Paper and to each other.
+
+For example, an event listener only needs to implement Bukkit's `Listener` interface and add the `@EventListener` annotation:
+
+<Code lang="java" code={`
+@EventListener
+public final class PlayerConnectionEvents implements Listener {
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        // ...
+    }
+}`} />
+
+When Reedwork scans the package, it discovers the annotated class and registers it with Paper automatically.
+
+The same principle is used throughout the framework.
+
+## What Reedwork provides
+
+### Dependency Injection
+
+Reedwork can resolve constructor dependencies automatically.
+
+A component can simply declare the services it requires:
+
+<Code lang="java" code={`
+public ReedworkCommand(
+        GreeterService greeterService,
+        ExecuteCounter executeCounter
+) {
+    this.greeterService = greeterService;
+    this.executeCounter = executeCounter;
+}`} />
+
+Reedwork resolves these dependencies when creating the component.
+
+Components can be managed as singletons or transient instances, while external classes can be registered through explicit bindings.
+
+See [Dependency Injection](../dependency-injection/) for details.
+
+### Events
+
+Event listeners can be discovered and registered automatically.
+
+You continue using the normal Bukkit/Paper event API with `Listener` and `@EventHandler`.
+
+The only Reedwork-specific part is the `@EventListener` annotation.
+
+See [Events](../events/) for details.
+
+### Commands
+
+Reedwork turns Java classes, annotations, and method parameters into Paper Brigadier commands.
+
+Instead of manually constructing Brigadier nodes and converting command arguments, you declare the command structure and use normal Java types:
+
+<Code lang="java" code={`
+@SubCommand("<target>")
+public boolean greetTarget(
+        CommandContext context,
+        Player target
+) {
+    // ...
+    return true;
+}`} />
+
+Reedwork maps the `Player` parameter to the corresponding Paper argument automatically.
+
+Command metadata, aliases, permissions, cooldowns, suggestions, and usage can also be declared directly in Java.
+
+See [Commands](../commands/) for details.
+
+### Custom enchantments
+
+Reedwork can discover `CustomEnchantment` implementations and register them during Paper's bootstrap phase.
+
+A custom enchantment can therefore be defined as a regular Java class:
+
+<Code lang="java" code={`
+@Enchantment("reedworkpower")
+public final class ReedworkEnchantment implements CustomEnchantment {
+    // ...
+}`} />
+
+Reedwork handles the integration with Paper's Minecraft registry system.
+
+See [Enchantments](../enchantments/) for details.
+
+## One framework, familiar APIs
+
+Reedwork does not replace the APIs provided by Paper.
+
+Instead, it builds on top of them.
+
+Your event listeners are still Bukkit/Paper listeners.
+
+Your commands still become Paper Brigadier commands.
+
+Your enchantments are still registered through Paper's registry system.
+
+Your services are still ordinary Java classes.
+
+Reedwork primarily removes the repetitive infrastructure connecting these pieces together.
+
+## The Reedwork approach
+
+The framework follows a simple principle:
+
+**Write the component you want. Let Reedwork handle how it gets registered, created, and connected.**
+
+This keeps plugin code focused on behavior instead of framework infrastructure.
+
+As your plugin grows, the same approach can be applied across events, commands, services, registry-backed features, and other components.
+
+## Getting started
+
+If you are new to Reedwork, start with the [Installation](../installation/) guide.
+
+After installation, continue with the individual feature guides:
+
+- [Dependency Injection](../dependency-injection/)
+- [Events](../events/)
+- [Commands](../commands/)
+- [Enchantments](../enchantments/)
+- [Utilities](../utilities/)
