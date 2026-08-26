@@ -1,0 +1,150 @@
+---
+title: Create a PaperMC Event Listener with Reedwork in 5 Minutes
+description: Learn how to create and register a PaperMC event listener with Reedwork in just 5 minutes.
+---
+
+import {Aside, Code, FileTree} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github.ts";
+
+export const pluginCode = await getExample("FiveMinuteEventListener/src/main/java/dev/reedworkmc/examples/fiveminuteeventlistener/FiveMinuteEventListener.java");
+export const eventCode = await getExample("FiveMinuteEventListener/src/main/java/dev/reedworkmc/examples/fiveminuteeventlistener/events/PlayerJoinServerEventListener.java");
+
+By the end of this tutorial, you will have a working PaperMC event listener that automatically gets discovered and registered by Reedwork.
+
+## 1. Install Reedwork
+
+First, add Reedwork to your Paper plugin project.
+
+<Aside type="tip">
+    See the [Installation guide](/getting-started/installation) for the complete setup.
+</Aside>
+
+---
+
+## 2. Scan Your Plugin Package
+
+Reedwork uses package scanning to discover annotated components such as event listeners.
+
+Start by creating your main plugin class:
+
+<Code title="FiveMinuteEventListener.java" lang="java" code={pluginCode} />
+
+This creates a Reedwork instance for your plugin and scans the specified package for Reedwork components.
+
+Because the event listener is located inside this package, Reedwork automatically discovers it.
+
+For example:
+
+<FileTree>
+    - src/main/java/
+        - dev.reedworkmc.examples.fiveminuteeventlistener
+            - FiveMinuteEventListener.java
+</FileTree>
+
+You do not need to manually register the listener with Bukkit.
+
+---
+
+## 3. Create the Event Listener
+
+Create an `events` package.
+
+Create `PlayerJoinServerEventListener`:
+
+<FileTree>
+    - src/main/java/
+        - dev.reedworkmc.examples.fiveminuteeventlistener
+            - events
+                - PlayerJoinServerEventListener.java
+            - FiveMinuteEventListener.java
+</FileTree>
+
+<Code title="PlayerJoinServerEventListener.java" lang="java" code={eventCode} />
+
+There are two important annotations here.
+
+### `@EventListener`
+
+```java
+@EventListener
+```
+
+This tells Reedwork that the class should be automatically discovered and registered as a Bukkit event listener.
+
+The class still uses the normal Bukkit `Listener` interface.
+
+`@EventHandler`
+```java
+@EventHandler
+public void onPlayerJoin(PlayerJoinEvent event) {
+    // Handling here
+}
+```
+
+This is the standard Bukkit event handler annotation.
+
+Reedwork does not replace Bukkit's event system. It only handles discovery and registration.
+
+When a player joins, the event method is executed:
+
+```java
+Player player = event.getPlayer();
+player.sendMessage(Component.text("Hello Reedwork!"));
+```
+
+## 4. Build and Test
+
+Build your plugin:
+
+```bash
+mvn clean package
+```
+
+Copy the resulting JAR from `target/` into the `plugins/` directory of your Paper server.
+
+Start the server.
+
+Reedwork will scan:
+
+```text
+dev.reedworkmc.examples.fiveminuteeventlistener
+```
+
+and automatically discover `PlayerJoinServerEventListener`.
+
+Join the server.
+
+The joining player receives:
+
+```text
+Hello Reedwork!
+```
+
+That's it — you have created a PaperMC event listener with Reedwork without manually registering it.
+
+## What You Learned
+
+In just a few minutes, you learned how to:
+
+Add Reedwork to a PaperMC plugin
+Initialize Reedwork with Reedwork.create(this)
+Scan your plugin package
+
+Let Reedwork automatically discover and register listeners
+
+- Install Reedwork in a PaperMC plugin
+- Initialize Reedwork with `Reedwork.create(this)`
+- Scan your plugin package
+- Create an event listener with `@EventListener`
+- Use Bukkit's standard `@EventHandler`
+- Let Reedwork automatically discover and register the command
+
+## Next Steps
+
+Now that you have created your first event listener, explore what else Reedwork can do.
+
+Check out the [event documentation](/features/events) for more advanced features, or continue with:
+
+- [Commands](/features/commands) — create powerful PaperMC commands
+- [Dependency Injection](/features/dependency-injection) — inject dependencies into your components
+- [Custom Enchantments](/tutorials/five-minute-enchantment) — create your first Reedwork enchantment

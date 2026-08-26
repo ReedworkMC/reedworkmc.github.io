@@ -63,6 +63,10 @@ export default defineConfig({
                                     label: 'Create a PaperMC Brigadier Command',
                                     slug: 'tutorials/five-minute-command',
                                 },
+                                {
+                                    label: 'Create a PaperMC Event Listener',
+                                    slug: 'tutorials/five-minute-event-listener',
+                                },
                             ],
                         },
                     ],
