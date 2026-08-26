@@ -54,6 +54,23 @@ export default defineConfig({
                         {label: 'Colorfulness Finder', slug: 'utilities/colorfulness-finder'},
                     ],
                 },
+                {
+                    label: 'Tutorials',
+                    items: [
+                        {
+                            label: 'Learn Reedwork in 5 Minutes', items: [
+                                {
+                                    label: 'Create a PaperMC Brigadier Command',
+                                    slug: 'tutorials/five-minute-command',
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    label: 'PaperMC Documentation',
+                    link: 'https://docs.papermc.io/paper/',
+                },
             ],
         }),
         icon(),
