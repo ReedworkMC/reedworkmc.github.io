@@ -49,32 +49,26 @@ No manual argument conversion is required.
 The `@Command` annotation defines the root command and its metadata.
 
 | Attribute     | Description                                |
-| ------------- | ------------------------------------------ |
+|---------------|--------------------------------------------|
 | `value`       | The command name.                          |
 | `description` | Description associated with the command.   |
 | `permission`  | Permission required to access the command. |
 | `cooldown`    | Command cooldown in seconds.               |
 | `aliases`     | Alternative names for the command.         |
+| `usage`       | Optional command usage string.             |
 
 For example:
 
-```java
+***java
 @Command(
     value = "helloreedwork",
     description = "Send a welcome message to a player",
     permission = "reedwork.example.hello",
     cooldown = 10,
-    aliases = {"hellorw", "hrw"}
+    aliases = {"hellorw", "hrw"},
+    usage = "/helloreedwork [target]"
 )
-```
-
-This produces the root command and its aliases:
-
-```text
-/helloreedwork
-/hellorw
-/hrw
-```
+***
 
 The command itself is only the root of the generated command tree. Execution paths are defined by command handlers and subcommands.
 
@@ -255,7 +249,7 @@ The resolver registry currently covers the following categories.
 | `String`         | String         | String command arguments.    |
 | `UUID`           | UUID           | UUID values.                 |
 
-#### Bukkit/Paper types
+### Bukkit/Paper types
 
 | Java type            | Paper argument          | Description                             |
 | -------------------- | ----------------------- | --------------------------------------- |
@@ -279,12 +273,14 @@ The resolver registry currently covers the following categories.
 | `Style`              | Style                   | Adventure text styles.                  |
 | `World`              | World                   | Resolves a world.                       |
 
-#### Ranges
+### Ranges
 
-| `DoubleRange`        | Double Range            | Resolves a double range.                |
-| `IntegerRange`       | Integer Range           | Resolves an integer range.              |
+| Java type      | Paper argument | Description                |
+|----------------|----------------|----------------------------|
+| `DoubleRange`  | Double Range   | Resolves a double range.   |
+| `IntegerRange` | Integer Range  | Resolves an integer range. |
 
-#### Collections
+### Collections
 
 | Java type             | Paper argument          | Description                             |
 | --------------------- | ----------------------- | --------------------------------------- |
@@ -450,11 +446,11 @@ Commands can define a Bukkit/Paper permission:
 If the sender does not have the required permission, the command is not available to that sender.
 
 <Aside>
-    Reedwork integrates with Paper's permission system when constructing the command tree.
+Reedwork integrates with Paper's permission system when constructing the command tree.
 </Aside>
 
 <Aside type="caution">
-    Being an operator does not automatically grant access when the required permission is not granted.
+Being an operator does not automatically grant access when the required permission is not granted.
 </Aside>
 
 ### Cooldowns
@@ -467,6 +463,7 @@ Commands can define a cooldown directly in their declaration:
     cooldown = 10
 )
 ```
+
 <Aside>
 The cooldown value is specified in seconds.
 </Aside>
@@ -492,6 +489,25 @@ The command can then be invoked using:
 /hrw
 ```
 
+### Usage
+
+The command usage can optionally be specified with the `usage` attribute:
+
+```java
+@Command(
+    value = "helloreedwork",
+    usage = "/helloreedwork [target]"
+)
+```
+
+The `usage` value controls the usage string associated with the command.
+
+Specifying a usage string is optional.
+
+If `usage` is omitted, Reedwork automatically generates the usage from the available command paths and their arguments.
+
+This means you normally do not need to maintain a separate usage string when adding or changing command arguments.
+
 ## Automatic registration
 
 Commands do not need to be registered manually with Bukkit or Paper.
@@ -513,6 +529,7 @@ A relatively small Java class can describe:
 - permissions
 - aliases
 - cooldowns
+- usage
 - Brigadier argument types
 - argument parsing
 - argument conversion
@@ -531,9 +548,9 @@ This is the central idea behind Reedwork's command system: instead of writing Br
 
 Now that you understand Reedwork's command system, explore the systems that integrate with it:
 
-- [Dependency Injection](../dependency-injection/)
 - [Events](../events/)
 - [Enchantments](../enchantments/)
+- [Dependency Injection](../dependency-injection/)
 - [Utilities](../utilities/)
 
 The complete runnable command example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.
