@@ -1,0 +1,222 @@
+---
+title: Dependency Injection
+description: Automatically resolve and manage dependencies across Reedwork components.
+---
+
+import {Code} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github";
+
+export const pluginCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/DependencyInjectionExample.java");
+export const counterCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/ExecuteCounter.java");
+export const greeterCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/GreeterService.java");
+export const commandCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/commands/ReedworkCommand.java");
+
+# Dependency Injection
+
+Reedwork includes a dependency injection system that allows components to receive their dependencies automatically through their constructors.
+
+Instead of manually creating service instances and passing them through your application, you declare the dependencies your component needs and Reedwork resolves them when the component is created.
+
+For example, a command can simply declare its required services in its constructor:
+
+<Code title="ReedworkCommand.java" lang="java" code={commandCode}/>
+
+Reedwork resolves `GreeterService`, `ExecuteCounter`, and `FileFromExternalLib` automatically.
+
+## Component lifecycles
+
+Reedwork supports different lifecycles for components.
+
+The two component annotations are `@Singleton` and `@Transient`.
+
+### Singleton
+
+A `@Singleton` component is created once and the same instance is reused whenever the component is injected.
+
+For example:
+
+<Code title="ExecuteCounter.java" lang="java" mark="@Singleton" code={counterCode}/>
+
+`ExecuteCounter` is created once and can maintain state across multiple command executions.
+
+Because its constructor requires `FileFromExternalLib`, Reedwork also resolves that dependency automatically.
+
+### Transient
+
+A `@Transient` component creates a new instance whenever Reedwork resolves it.
+
+<Code title="GreeterService.java" lang="java" mark="@Transient" code={greeterCode}/>
+
+`GreeterService` does not maintain any state, so a new instance can be created for each injection.
+
+This is useful for lightweight services where sharing a single instance is not required.
+
+## Binding external classes
+
+Not every dependency needs to be a Reedwork component.
+
+External classes can be registered manually through the Reedwork builder.
+
+For example, the example project uses a class from an external library:
+
+<Code lang="java" code={`
+public final class FileFromExternalLib {
+
+    private int amountToAdd;
+
+    public FileFromExternalLib(int amountToAdd) {
+        this.amountToAdd = amountToAdd;
+    }
+
+    public int getAmountToAdd() {
+        return amountToAdd;
+    }
+
+    public void setAmountToAdd(int amountToAdd) {
+        this.amountToAdd = amountToAdd;
+    }
+}
+`} />
+
+The class does not need a Reedwork annotation.
+
+Instead, it can be registered explicitly:
+
+<Code lang="java" mark="toSingleton" code={`
+Reedwork.create(this)
+    .bind(FileFromExternalLib.class)
+    .toSingleton(new FileFromExternalLib(42))
+    .scan("dev.reedworkmc.examples.dependencyinjection");
+`} />
+
+This registers the supplied instance as a singleton.
+
+Whenever `FileFromExternalLib` is injected, Reedwork provides the same instance.
+
+## Transient bindings
+
+External classes can also be registered as transient dependencies.
+
+<Code lang="java" mark="to" code={`
+Reedwork.create(this)
+    .bind(FileFromExternalLib.class)
+    .to(FileFromExternalLib.class)
+    .scan("dev.reedworkmc.examples.dependencyinjection");
+`} />
+
+With `to(...)`, Reedwork creates a new instance whenever the dependency is resolved.
+
+This is useful when the dependency should not be shared between components.
+
+## Factory bindings
+
+A dependency can also be created through a factory.
+
+<Code lang="java" mark="toFactory" code={`
+Reedwork.create(this)
+    .bind(FileFromExternalLib.class)
+    .toFactory(() -> new FileFromExternalLib(random.nextInt(100)))
+    .scan("dev.reedworkmc.examples.dependencyinjection");
+`} />
+
+The factory is invoked whenever Reedwork needs to resolve the dependency.
+
+This is useful when the construction of a dependency requires custom logic or dynamic values.
+
+## Named bindings
+
+Reedwork also supports multiple bindings of the same Java type.
+
+A binding can be assigned a name using `.named(String)`:
+
+<Code lang="java" code={`
+Reedwork.create(this)
+    .bind(FileFromExternalLib.class)
+    .named("first")
+    .toSingleton(new FileFromExternalLib(10))
+
+    .bind(FileFromExternalLib.class)
+    .named("second")
+    .toSingleton(new FileFromExternalLib(20))
+
+    .scan("dev.reedworkmc.examples.dependencyinjection");
+`} />
+
+The corresponding dependency can then be selected with `@Named`:
+
+<Code lang="java" code={`
+public ReedworkService(
+        @Named("first") FileFromExternalLib first,
+        @Named("second") FileFromExternalLib second
+) {
+    // ...
+}
+`} />
+
+The name becomes part of the dependency lookup, allowing multiple instances of the same type to be injected into the same component.
+
+## Constructor injection
+
+Reedwork resolves constructor parameters automatically.
+
+For example:
+
+<Code lang="java" mark="ReedworkCommand" code={`
+public ReedworkCommand(
+        GreeterService greeterService,
+        ExecuteCounter executeCounter,
+        FileFromExternalLib fileFromExternalLib
+) {
+    this.greeterService = greeterService;
+    this.executeCounter = executeCounter;
+    this.fileFromExternalLib = fileFromExternalLib;
+}`} />
+
+When Reedwork creates `ReedworkCommand`, it resolves each constructor parameter from the dependency container.
+
+The dependency graph in this example looks like:
+
+```text
+ReedworkCommand
+├── GreeterService
+├── ExecuteCounter
+│   └── FileFromExternalLib
+└── FileFromExternalLib
+```
+
+This means `FileFromExternalLib` is resolved independently for the command and for `ExecuteCounter`, while the exact instance behavior depends on how the binding is configured.
+
+## The result
+
+Dependency injection keeps Reedwork components focused on their actual responsibilities.
+
+You declare what a component needs:
+
+```java
+public ReedworkCommand(
+        GreeterService greeterService,
+        ExecuteCounter executeCounter,
+        FileFromExternalLib fileFromExternalLib
+) {
+    // ...
+}
+```
+
+Reedwork handles creating the objects and resolving their dependencies.
+
+This works across Reedwork-managed components such as commands, event listeners, and other injectable services.
+
+You define the **dependencies your component needs**.
+
+Reedwork handles the **dependency graph and object creation**.
+
+## Next steps
+
+Now that you understand dependency injection, explore the other Reedwork systems:
+
+- [Commands](../commands/)
+- [Events](../events/)
+- [Enchantments](../enchantments/)
+- [Utilities](../utilities/)
+
+The complete runnable dependency injection example is available in the [ReedworkExamples](https://github.com/ReedworkMC/ReedworkExamples) repository.

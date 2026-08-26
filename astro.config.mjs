@@ -36,10 +36,10 @@ export default defineConfig({
                 {
                     label: 'Features',
                     items: [
-                        {label: 'Dependency Injection', slug: 'features/dependency-injection'},
                         {label: 'Commands', slug: 'features/commands'},
                         {label: 'Events', slug: 'features/events'},
                         {label: 'Enchantments', slug: 'features/enchantments'},
+                        {label: 'Dependency Injection', slug: 'features/dependency-injection'},
                         {label: 'Utilities', slug: 'features/utilities'},
                     ],
                 },
