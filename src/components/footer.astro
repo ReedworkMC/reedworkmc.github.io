@@ -2,7 +2,7 @@
 import {Icon as AstroIcon} from 'astro-icon/components';
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" aria-label="Reedwork website footer">
     <div class="footer-content">
         <div class="footer-brand">
             <div class="brand">
@@ -22,7 +22,8 @@ import {Icon as AstroIcon} from 'astro-icon/components';
                 Documentation
             </a>
 
-            <a href="https://github.com/ReedworkMC/Reedwork" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/ReedworkMC/Reedwork" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Reedwork source repository on GitHub">
                 <AstroIcon name="mdi:github" class="link-icon"/>
                 GitHub
                 <span class="external-icon">
@@ -30,7 +31,17 @@ import {Icon as AstroIcon} from 'astro-icon/components';
                      </span>
             </a>
 
-            <a href="https://github.com/ReedworkMC/Reedwork/releases" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/ReedworkMC/ReedworkExamples" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Reedwork PaperMC plugin examples on GitHub">
+                <AstroIcon name="mdi:github" class="link-icon"/>
+                Reedwork PaperMC examples
+                <span class="external-icon">
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+                     </span>
+            </a>
+
+            <a href="https://github.com/ReedworkMC/Reedwork/releases" target="_blank" rel="noopener noreferrer"
+               aria-label="Open Reedwork releases on GitHub">
                 <AstroIcon name="mdi:tag-outline" class="link-icon"/>
                 Releases
                 <span class="external-icon">
@@ -55,13 +66,25 @@ import {Icon as AstroIcon} from 'astro-icon/components';
     </div>
 
     <div class="footer-bottom">
-        <span>
-            © 2026-present <a href="https://github.com/0kAj" target="_blank" rel="noopener noreferrer">0kAj</a>
-        </span>
+    <span>
+        © 2026-present
+        <a href="https://github.com/0kAj"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open 0kAj GitHub profile">
+            0kAj
+        </a>
+    </span>
 
         <span>
-            Icons by <a href="https://github.com/Templarian/MaterialDesign" target="_blank" rel="noopener noreferrer">Material Design Icons</a>
-        </span>
+        Icons by
+        <a href="https://github.com/Templarian/MaterialDesign"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open Material Design Icons GitHub repository">
+            Material Design Icons
+        </a>
+    </span>
     </div>
 </footer>
 

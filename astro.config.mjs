@@ -47,7 +47,7 @@ export default defineConfig({
                 {
                     label: 'Utilities',
                     items: [
-                        {label: 'Overview', slug: 'utilities'},
+                        {label: 'Utilities Overview', slug: 'utilities'},
                         {label: 'Bedrock Utils', slug: 'utilities/bedrock-utils'},
                         {label: 'Bukkit to String', slug: 'utilities/bukkit-to-string'},
                         {label: 'Color Utils', slug: 'utilities/color-utils'},
