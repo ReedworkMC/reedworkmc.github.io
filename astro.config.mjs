@@ -6,6 +6,8 @@ import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
 
 import mdx from '@astrojs/mdx';
+import opengraphImages, {presets} from "astro-opengraph-images";
+import * as fs from "fs";
 
 export default defineConfig({
     site: 'https://reedworkmc.github.io/',
@@ -16,6 +18,10 @@ export default defineConfig({
             title: 'Reedwork',
             description:
                 'A modern framework for building PaperMC plugins with less boilerplate.',
+
+            components: {
+                Head: '@components/Head.astro',
+            },
 
             social: [
                 {
@@ -82,6 +88,19 @@ export default defineConfig({
             ],
         }),
         icon(),
-        mdx()
+        mdx(),
+        opengraphImages({
+            options: {
+                fonts: [
+                    {
+                        name: 'Roboto',
+                        weight: 400,
+                        style: 'normal',
+                        data: fs.readFileSync("node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff"),
+                    }
+                ],
+            },
+            render: presets.blackAndWhite
+        }),
     ],
 });

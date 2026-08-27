@@ -1,0 +1,43 @@
+---
+import DefaultHead from '@astrojs/starlight/components/Head.astro';
+import { SEO } from 'astro-seo';
+import { getImagePath } from 'astro-opengraph-images';
+
+const { url, site } = Astro;
+
+const route = Astro.locals.starlightRoute;
+const { entry } = route;
+
+const title = entry.data.title;
+const description = entry.data.description;
+
+const openGraphImageUrl = getImagePath({ url, site });
+
+route.head.push({
+    tag: 'meta',
+    attrs: {
+        property: 'og:image',
+        content: openGraphImageUrl,
+    },
+});
+---
+
+<DefaultHead {...Astro.props}>
+    <SEO
+            title={title}
+            description={description}
+            canonical={url}
+            openGraph={{
+                basic: {
+                    title,
+                    type: 'website',
+                    image: openGraphImageUrl,
+                    url,
+                },
+                optional: {
+                    description,
+                },
+            }}
+    />
+    <slot />
+</DefaultHead>
