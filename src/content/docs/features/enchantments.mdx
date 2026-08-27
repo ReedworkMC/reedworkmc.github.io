@@ -7,6 +7,7 @@ import {Code} from "@astrojs/starlight/components";
 import {getExample} from "@lib/github";
 
 export const enchantmentCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/ReedworkEnchantment.java");
+export const pluginYmlCode = await getExample("EnchantmentExample/src/main/resources/paper-plugin.yml");
 export const bootstrapCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/EnchantmentExampleBootstrap.java");
 
 # Custom Enchantments for PaperMC Plugins
@@ -35,7 +36,7 @@ public final class ReedworkEnchantment implements CustomEnchantment {
 
 The key identifies the enchantment within the Minecraft registry system.
 
-The `CustomEnchantment` implementation then provides the properties used to construct the corresponding Paper enchantment registry entry.
+The `CustomEnchantment` implementation then provides the properties used to create the corresponding Paper enchantment registry entry.
 
 ## Configure enchantment properties
 
@@ -82,7 +83,7 @@ The remaining methods work in the same way. Reedwork takes the values returned b
 
 Custom enchantments are registry-backed Minecraft data and therefore need to be created during the appropriate Paper bootstrap lifecycle.
 
-The example uses a `PluginBootstrap`:
+The example uses a `PluginBootstrap` implementation:
 
 <Code title="EnchantmentExampleBootstrap.java" lang="java" code={bootstrapCode}/>
 
@@ -97,23 +98,15 @@ public void bootstrap(final BootstrapContext context) {
 
 `Reedwork.bootstrap(context)` initializes Reedwork for the Paper bootstrap environment.
 
-The `scan` call discovers the `@Enchantment` component and registers it with the Minecraft registry.
+The `scan` call discovers Reedwork components in the specified package, including the `@Enchantment` component, and handles their registration with the Minecraft registry.
 
 No manual registry construction or registration call is required.
 
-## Configure the Paper plugin bootstrapper
+## Configure the Paper bootstrapper
 
 Because the custom enchantment is registered during Paper's bootstrap phase, the plugin declares its bootstrapper in `paper-plugin.yml`:
 
-<Code title="paper-plugin.yml" lang="yaml" mark="bootstrapper" code={`
-name: EnchantmentExample
-version: '\${version}'
-
-main: dev.reedworkmc.examples.enchantment.EnchantmentExample
-bootstrapper: dev.reedworkmc.examples.enchantment.EnchantmentExampleBootstrap
-api-version: '26.2'
-load: POSTWORLD
-`} />
+<Code title="paper-plugin.yml" lang="yaml" code={pluginYmlCode} />
 
 The `bootstrapper` entry points to the class implementing `PluginBootstrap`.
 
