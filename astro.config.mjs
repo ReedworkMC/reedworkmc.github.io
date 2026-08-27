@@ -67,6 +67,10 @@ export default defineConfig({
                                     label: 'Create a PaperMC Event Listener',
                                     slug: 'tutorials/five-minute-event-listener',
                                 },
+                                {
+                                    label: 'Create a PaperMC Custom Enchantment',
+                                    slug: 'tutorials/five-minute-enchantment',
+                                },
                             ],
                         },
                     ],

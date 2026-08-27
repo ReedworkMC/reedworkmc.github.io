@@ -1,0 +1,261 @@
+---
+title: Create a PaperMC Custom Enchantment with Reedwork in 5 Minutes
+description: Learn how to create and register a custom PaperMC enchantment with Reedwork in just 5 minutes.
+---
+
+import {Aside, Code, FileTree} from "@astrojs/starlight/components";
+import {getExample} from "@lib/github.ts";
+
+export const bootstrapCode = await getExample("FiveMinuteEnchantment/src/main/java/dev/reedworkmc/examples/fiveminuteenchantment/FiveMinuteEnchantmentBootstrap.java");
+export const pluginYmlCode = await getExample("FiveMinuteEnchantment/src/main/resources/paper-plugin.yml");
+export const enchantmentCode = await getExample("FiveMinuteEnchantment/src/main/java/dev/reedworkmc/examples/fiveminuteenchantment/enchantments/ReedworkEnchantment.java");
+
+By the end of this tutorial, you will have a custom PaperMC enchantment that is automatically discovered and registered by Reedwork.
+
+## 1. Install Reedwork
+
+First, add Reedwork to your Paper plugin project.
+
+<Aside type="tip">
+    See the [Installation guide](/getting-started/installation) for the complete setup.
+</Aside>
+
+---
+
+## 2. Bootstrap Reedwork
+
+Unlike commands and event listeners, custom enchantments are registered through Paper's registry system during the bootstrap phase.
+
+Create a `PluginBootstrap` implementation:
+
+<FileTree>
+    - src/main/java/
+        - dev.reedworkmc.examples.fiveminuteenchantment
+            - FiveMinuteEnchantment.java
+            - FiveMinuteEnchantmentBootstrap.java
+</FileTree>
+
+<Code title="FiveMinuteEnchantmentBootstrap.java" lang="java" code={bootstrapCode} />
+
+The bootstrapper is executed during Paper's bootstrap phase, before the plugin is fully enabled.
+
+It initializes Reedwork and scans the specified package for Reedwork components:
+
+```java
+Reedwork.bootstrap(context)
+        .scan("dev.reedworkmc.examples.fiveminuteenchantment");
+```
+
+Your `paper-plugin.yml` must reference the bootstrapper:
+
+<Code title="paper-plugin.yml" lang="yaml" code={pluginYmlCode} />
+
+This allows Paper to execute `FiveMinuteEnchantmentBootstrap` during the bootstrap phase.
+
+Because the enchantment is located below the scanned package, Reedwork automatically discovers it.
+
+<Aside>
+    Custom enchantments use Paper's bootstrap and registry APIs, so the Reedwork bootstrap entry point is used instead of `Reedwork.create(this)`.
+</Aside>
+
+---
+
+## 3. Create the Enchantment
+
+Create an `enchantments` package:
+
+<FileTree>
+    - src/main/java/
+        - dev.reedworkmc.examples.fiveminuteenchantment
+            - FiveMinuteEnchantment.java
+            - FiveMinuteEnchantmentBootstrap.java
+            - enchantments
+                - ReedworkEnchantment.java
+</FileTree>
+
+Create `ReedworkEnchantment`:
+
+<Code title="ReedworkEnchantment.java" lang="java" code={enchantmentCode} />
+
+The class is marked with:
+
+```java
+@Enchantment("reedworkinfiveminutes")
+```
+
+This tells Reedwork that the class defines a custom enchantment and uses `reedworkinfiveminutes` as its registry key.
+
+The class implements `CustomEnchantment`:
+
+```java
+public class ReedworkEnchantment implements CustomEnchantment
+```
+
+`CustomEnchantment` provides the properties used to define the enchantment.
+
+---
+
+## 4. Define the Enchantment
+
+### Description
+
+The description is defined using:
+
+```java
+@Override
+public Component description() {
+    return Component.text("Reedwork in 5 Minutes");
+}
+```
+
+This is the name displayed for the enchantment.
+
+---
+
+### Supported Items
+
+The enchantment uses:
+
+```java
+@Override
+public TagKey<ItemType> supportedItems() {
+    return ItemTypeTagKeys.ENCHANTABLE_ARMOR;
+}
+```
+
+This means the enchantment is available for items belonging to Paper's `ENCHANTABLE_ARMOR` item tag.
+
+---
+
+### Maximum Level
+
+The enchantment has a maximum level of 1:
+
+```java
+@Override
+public int maxLevel() {
+    return 1;
+}
+```
+
+Therefore, the enchantment only has one level.
+
+---
+
+### Anvil Cost and Weight
+
+The example defines an anvil cost of `1`:
+
+```java
+@Override
+public int anvilCost() {
+    return 1;
+}
+```
+
+Its weight is also `1`:
+
+```java
+@Override
+public int weight() {
+    return 1;
+}
+```
+
+These values are part of the enchantment's Paper registry configuration.
+
+---
+
+### Enchantment Cost
+
+The minimum and maximum enchantment costs are defined using Paper's `EnchantmentCost`:
+
+```java
+@Override
+public EnchantmentRegistryEntry.EnchantmentCost minimumCost() {
+    return EnchantmentRegistryEntry.EnchantmentCost.of(1, 5);
+}
+
+@Override
+public EnchantmentRegistryEntry.EnchantmentCost maximumCost() {
+    return EnchantmentRegistryEntry.EnchantmentCost.of(1, 7);
+}
+```
+
+This defines the cost range used by the enchantment.
+
+---
+
+### Active Equipment Slots
+
+Finally, the enchantment is active on armor slots:
+
+```java
+@Override
+public EquipmentSlotGroup activeSlots() {
+    return EquipmentSlotGroup.ARMOR;
+}
+```
+
+This tells Paper which equipment slots the enchantment applies to.
+
+---
+
+## 5. Build and Test
+
+Build your plugin:
+
+```bash
+mvn clean package
+```
+
+Copy the resulting JAR from `target/` into the `plugins/` directory of your Paper server.
+
+Start the server.
+
+During the Paper bootstrap phase, Reedwork scans:
+
+```text
+dev.reedworkmc.examples.fiveminuteenchantment
+```
+
+and automatically discovers `ReedworkEnchantment`.
+
+The enchantment is registered with the key:
+
+```text
+minecraft:reedworkinfiveminutes
+```
+
+The enchantment is available as an enchanted book in the Creative Inventory and can be applied to items supported by `ENCHANTABLE_ARMOR`.
+
+To test the enchantment, hold an applicable item in your main hand and execute:
+
+```text
+/enchant @s minecraft:reedworkinfiveminutes
+```
+
+That's it — you have created a custom PaperMC enchantment with Reedwork without manually registering it with Paper's registry system.
+
+## What You Learned
+
+In just a few minutes, you learned how to:
+
+- Add Reedwork to a PaperMC plugin
+- Initialize Reedwork during Paper's bootstrap phase
+- Scan your plugin package
+- Create a custom enchantment with `@Enchantment`
+- Implement `CustomEnchantment`
+- Define supported items and active equipment slots
+- Configure the enchantment level, weight, anvil cost, and enchantment costs
+- Let Reedwork automatically discover and register the enchantment
+
+## Next Steps
+
+Now that you have created your first custom enchantment, explore what else Reedwork can do.
+
+Check out the [enchantment documentation](/features/enchantments) for more advanced features, or continue with:
+
+- [Commands](/features/commands) — create powerful PaperMC commands
+- [Events](/features/events) — react to Paper/Bukkit events
+- [Dependency Injection](/features/dependency-injection) — inject dependencies into your components
