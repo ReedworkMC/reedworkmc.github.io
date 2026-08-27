@@ -6,8 +6,10 @@ import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
 
 import mdx from '@astrojs/mdx';
-import opengraphImages, {presets} from "astro-opengraph-images";
+import opengraphImages from "astro-opengraph-images";
 import * as fs from "fs";
+
+import {ogLayout} from "@/og/ReedworkOG.ts";
 
 export default defineConfig({
     site: 'https://reedworkmc.github.io/',
@@ -100,7 +102,7 @@ export default defineConfig({
                     }
                 ],
             },
-            render: presets.blackAndWhite
+            render: ogLayout
         }),
     ],
 });
