@@ -1,0 +1,405 @@
+/* ============================================================
+   REEDWORK — STARLIGHT THEME
+   ============================================================ */
+
+
+/* ============================================================
+   Color system
+   ============================================================ */
+
+/* Dark mode colors. */
+:root {
+    --sl-color-accent-low: #24134f;
+    --sl-color-accent: #8b5cf6;
+    --sl-color-accent-high: #c4b5fd;
+
+    --sl-color-white: #ffffff;
+
+    --sl-color-gray-1: #f4f4f5;
+    --sl-color-gray-2: #d4d4d8;
+    --sl-color-gray-3: #a1a1aa;
+    --sl-color-gray-4: #71717a;
+    --sl-color-gray-5: #3f3f46;
+    --sl-color-gray-6: #18181d;
+
+    --sl-color-black: #07070a;
+
+    --rw-violet: #8b5cf6;
+    --rw-violet-light: #a78bfa;
+
+    --rw-cyan: #22d3ee;
+    --rw-cyan-light: #67e8f9;
+
+    --rw-surface: #0b0b10;
+}
+
+/* Light mode colors. */
+:root[data-theme='light'] {
+    --sl-color-accent-low: #e0e7ff;
+    --sl-color-accent: #7c3aed;
+    --sl-color-accent-high: #4c1d95;
+
+    --sl-color-white: #18181b;
+
+    --sl-color-gray-1: #27272a;
+    --sl-color-gray-2: #3f3f46;
+    --sl-color-gray-3: #52525b;
+    --sl-color-gray-4: #71717a;
+    --sl-color-gray-5: #a1a1aa;
+    --sl-color-gray-6: #d4d4d8;
+    --sl-color-gray-7: #f4f4f5;
+
+    --sl-color-black: #ffffff;
+
+    --rw-violet: #8b5cf6;
+    --rw-violet-light: #a78bfa;
+
+    --rw-cyan: #10525c;
+    --rw-cyan-light: #2e6a70;
+
+    --rw-surface: #f1f1f1;
+}
+
+
+/* ============================================================
+   Reedwork visual language
+   ============================================================ */
+
+:root {
+    --rw-border: rgba(255, 255, 255, 0.08);
+    --rw-border-strong: rgba(255, 255, 255, 0.11);
+
+    --rw-surface: #0b0b10;
+    --rw-surface-elevated: #101016;
+
+    --rw-gradient: linear-gradient(
+            90deg,
+            #8b5cf6 0%,
+            #22d3ee 100%
+    );
+
+    --rw-gradient-vertical: linear-gradient(
+            180deg,
+            rgba(139, 92, 246, 0.18),
+            rgba(34, 211, 238, 0.05)
+    );
+}
+
+
+/* ============================================================
+   Global background
+   ============================================================ */
+
+html {
+    background: var(--sl-color-black);
+}
+
+body {
+    background: radial-gradient(
+            circle at 85% 5%,
+            rgba(139, 92, 246, 0.055),
+            transparent 28%
+    ),
+    radial-gradient(
+            circle at 10% 85%,
+            rgba(34, 211, 238, 0.035),
+            transparent 25%
+    ),
+    var(--sl-color-black);
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+header.header {
+    background: rgba(7, 7, 10, 0.78);
+    border-bottom: 1px solid var(--rw-border);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+[data-theme='light'] header.header {
+    background: rgba(255, 255, 255, 0.82);
+}
+
+
+/* ============================================================
+   Site title / logo
+   ============================================================ */
+
+.site-title {
+    font-weight: 750;
+    letter-spacing: -0.02em;
+}
+
+.site-title span {
+    background: var(--rw-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+
+/* ============================================================
+   Sidebar
+   ============================================================ */
+
+.sidebar {
+    border-right: 1px solid var(--rw-border);
+    background: rgba(7, 7, 10, 0.35);
+}
+
+[data-theme='light'] .sidebar {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+
+/* Sidebar links */
+
+.sidebar-content a {
+    border-radius: 0.45rem;
+
+    transition: color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sidebar-content a:hover {
+    background: rgba(139, 92, 246, 0.155);
+    color: var(--sl-color-white);
+}
+
+.sidebar-content a[aria-current='page'] {
+    background: linear-gradient(
+            90deg,
+            rgba(139, 92, 246, 0.22),
+            rgba(139, 92, 246, 0.135)
+    );
+
+    color: var(--rw-violet-light);
+}
+
+
+/* Active sidebar indicator */
+
+.sidebar-content a[aria-current='page']::before {
+    background: var(--rw-violet);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.55);
+}
+
+
+/* ============================================================
+   Main content
+   ============================================================ */
+
+.sl-markdown-content {
+    color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.sl-markdown-content h4 {
+    color: var(--sl-color-white);
+    letter-spacing: -0.025em;
+}
+
+.sl-markdown-content h1 {
+    letter-spacing: -0.04em;
+}
+
+
+/* ============================================================
+   Links
+   ============================================================ */
+
+.sl-markdown-content a:not(.sl-link-button) {
+    color: var(--rw-violet-light);
+    text-decoration-color: rgba(167, 139, 250, 0.3);
+
+    transition: color 0.15s ease,
+    text-decoration-color 0.15s ease;
+}
+
+.sl-markdown-content a:hover:not(.sl-link-button) {
+    color: var(--rw-cyan-light);
+    text-decoration-color: rgba(103, 232, 249, 0.5);
+}
+
+
+/* ============================================================
+   Code
+   ============================================================ */
+
+.sl-markdown-content starlight-file-tree:not(pre starlight-file-tree),
+.sl-markdown-content code:not(pre code) {
+    border: 1px solid rgba(139, 92, 246, 0.14);
+    border-radius: 0.35rem;
+
+    background: rgba(139, 92, 246, 0.07);
+
+    color: var(--rw-violet-light);
+}
+
+starlight-file-tree,
+pre {
+    border-radius: 0.15rem;
+    color: var(--sl-color-accent);
+
+    background: radial-gradient(
+            circle at 90% 0%,
+            rgba(139, 92, 246, 0.055),
+            transparent 35%
+    ),
+    var(--rw-surface);
+}
+
+
+/* ============================================================
+   Blockquotes
+   ============================================================ */
+
+.sl-markdown-content blockquote {
+    border-left-color: var(--rw-violet);
+    background: rgba(139, 92, 246, 0.035);
+}
+
+
+/* ============================================================
+   Tables
+   ============================================================ */
+
+.sl-markdown-content table {
+    overflow: hidden;
+}
+
+.sl-markdown-content th {
+    background: rgba(139, 92, 246, 0.055);
+    color: var(--sl-color-white);
+}
+
+.sl-markdown-content td,
+.sl-markdown-content th {
+    border-color: var(--rw-border);
+}
+
+
+/* ============================================================
+   Cards
+   ============================================================ */
+
+.card,
+.sl-markdown-content .card {
+    border-radius: 0.7rem;
+
+    transition: border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* ============================================================
+   Asides
+   ============================================================ */
+
+.starlight-aside {
+    border-radius: 0.6rem;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.sl-link-button {
+    border-radius: 0.5rem;
+}
+
+.sl-link-button {
+    border-radius: 0.5rem;
+}
+
+.sl-link-button.primary {
+    background: var(--rw-violet-light);
+    border-color: var(--rw-violet);
+}
+
+.sl-link-button.primary:hover {
+    background: var(--rw-cyan-light);
+    border-color: var(--rw-cyan);
+}
+
+.sl-link-button.secondary {
+    border-color: var(--rw-violet-light);
+    color: var(--rw-violet-light);
+    text-decoration-color: rgba(167, 139, 250, 0.3);
+
+    transition: border-color 0.15s ease,
+    text-decoration-color 0.15s ease;
+}
+
+.sl-link-button.secondary:hover {
+    border-color: var(--rw-cyan-light);
+    color: var(--rw-cyan-light);
+    text-decoration-color: rgba(103, 232, 249, 0.5);
+}
+
+
+/* ============================================================
+   Search
+   ============================================================ */
+
+site-search button {
+    border-color: var(--rw-border);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+site-search button:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+
+/* ============================================================
+   Page navigation
+   ============================================================ */
+
+.pagination-links a {
+    border: 1px solid var(--rw-border);
+    border-radius: 0.6rem;
+
+    background: var(--rw-surface);
+
+    transition: border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.pagination-links a:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+    background: rgba(139, 92, 246, 0.045);
+}
+
+
+/* ============================================================
+   Selection
+   ============================================================ */
+
+::selection {
+    background: rgba(139, 92, 246, 0.3);
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 700px) {
+    body {
+        background: radial-gradient(
+                circle at 100% 0%,
+                rgba(139, 92, 246, 0.055),
+                transparent 35%
+        ),
+        var(--sl-color-black);
+    }
+}

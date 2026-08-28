@@ -25,6 +25,10 @@ export default defineConfig({
                 Head: '@components/Head.astro',
             },
 
+            customCss: [
+                '@/styles/default.css'
+            ],
+
             social: [
                 {
                     icon: 'github',

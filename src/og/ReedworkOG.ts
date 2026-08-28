@@ -83,38 +83,70 @@ export function ogLayout({
                     'div',
                     {
                         style: twj(
-                            'flex flex-row items-center justify-between w-full',
+                            'flex flex-row items-start justify-between w-full',
                         ),
                     },
 
-                    // ─────────────────────────────────────────
-                    // Placeholder for Reedwork logo
-
-                    // createElement(
-                    //     'img',
-                    //     {
-                    //         src: 'YOUR_LOGO_URL',
-                    //         width: 48,
-                    //         height: 48,
-                    //         style: {
-                    //             ...twj(
-                    //                 'rounded-xl mr-4',
-                    //             ),
-                    //         },
-                    //     },
-                    // ),
-                    // ─────────────────────────────────────────
-
-
-                    // Reedwork brand
+                    // Reedwork brand + framework label
                     createElement(
-                        'span',
+                        'div',
                         {
                             style: twj(
-                                'text-[32px] text-white font-bold tracking-[0.18em]',
+                                'flex flex-col',
                             ),
                         },
-                        'REEDWORK',
+
+                        // Reedwork brand
+                        createElement(
+                            'span',
+                            {
+                                style: {
+                                    ...twj(
+                                        'text-[32px] font-bold tracking-[-0.02em]',
+                                    ),
+                                    fontWeight: 750,
+                                    background:
+                                        'linear-gradient(90deg, #8b5cf6 0%, #22d3ee 100%)',
+                                    backgroundClip: 'text',
+                                    WebkitBackgroundClip: 'text',
+                                    color: 'transparent',
+                                },
+                            },
+                            'REEDWORK',
+                        ),
+
+                        // Plugin framework label
+                        createElement(
+                            'div',
+                            {
+                                style: {
+                                    ...twj(
+                                        'flex flex-row items-center mt-3',
+                                    ),
+                                },
+                            },
+
+                            createElement('div', {
+                                style: {
+                                    width: '28px',
+                                    height: '2px',
+                                    marginRight: '10px',
+                                    background:
+                                        'linear-gradient(90deg, #8b5cf6, #22d3ee)',
+                                    borderRadius: '999px',
+                                },
+                            }),
+
+                            createElement(
+                                'span',
+                                {
+                                    style: twj(
+                                        'text-[16px] text-slate-500 font-bold tracking-[0.22em] uppercase',
+                                    ),
+                                },
+                                'PLUGIN FRAMEWORK',
+                            ),
+                        ),
                     ),
 
                     // Platform badge
@@ -168,37 +200,6 @@ export function ogLayout({
                             'flex flex-col max-w-[1950px]',
                         ),
                     },
-
-                    // Eyebrow
-                    createElement(
-                        'div',
-                        {
-                            style: twj(
-                                'flex flex-row items-center mb-8',
-                            ),
-                        },
-
-                        createElement('div', {
-                            style: {
-                                width: '42px',
-                                height: '3px',
-                                marginRight: '14px',
-                                background:
-                                    'linear-gradient(90deg, #8b5cf6, #22d3ee)',
-                                borderRadius: '999px',
-                            },
-                        }),
-
-                        createElement(
-                            'span',
-                            {
-                                style: twj(
-                                    'text-[20px] text-slate-500 font-bold tracking-[0.22em] uppercase',
-                                ),
-                            },
-                            'PLUGIN FRAMEWORK',
-                        ),
-                    ),
 
                     // Title
                     createElement(
@@ -283,18 +284,6 @@ export function ogLayout({
                                 'flex flex-row items-center',
                             ),
                         },
-
-                        createElement('div', {
-                            style: {
-                                width: '8px',
-                                height: '8px',
-                                borderRadius: '999px',
-                                marginRight: '12px',
-                                background: '#22d3ee',
-                                boxShadow:
-                                    '0 0 16px rgba(34, 211, 238, 0.8)',
-                            },
-                        }),
 
                         createElement(
                             'span',
