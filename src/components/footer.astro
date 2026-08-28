@@ -64,34 +64,54 @@ import {Icon as AstroIcon} from 'astro-icon/components';
         <div class="footer-column">
             <h2>Project</h2>
 
-    <a href="https://github.com/ReedworkMC/Reedwork?tab=contributing-ov-file"
-       target="_blank"
-       rel="noopener noreferrer"
-       aria-label="Read the Reedwork contribution guidelines on GitHub">
-        <AstroIcon name="mdi:source-pull"/>
-        <span>Contributing</span>
-        <AstroIcon name="mdi:open-in-new" class="external-icon"/>
-    </a>
+            <a href="https://github.com/ReedworkMC/Reedwork?tab=contributing-ov-file"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Read the Reedwork contribution guidelines on GitHub">
+                <AstroIcon name="mdi:source-pull"/>
+                <span>Contributing</span>
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+            </a>
 
-    <a href="https://github.com/ReedworkMC/Reedwork?tab=LGPL-3.0-1-ov-file"
-       target="_blank"
-       rel="noopener noreferrer"
-       aria-label="Read the Reedwork license on GitHub">
-        <AstroIcon name="mdi:license"/>
-        <span>License</span>
-        <AstroIcon name="mdi:open-in-new" class="external-icon"/>
-    </a>
-</div>
+            <a href="https://github.com/ReedworkMC/Reedwork?tab=LGPL-3.0-1-ov-file"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Read the Reedwork license on GitHub">
+                <AstroIcon name="mdi:license"/>
+                <span>License</span>
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+            </a>
+
+            <a href="/legal-notice/">
+                <AstroIcon name="mdi:legal"/>
+                <span>Legal Notice</span>
+            </a>
+
+            <a href="/privacy-policy/">
+                <AstroIcon name="mdi:security"/>
+                <span>Privacy Policy</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-legal-disclaimer">
+        <p>
+            Reedwork is an independent open-source project and is not affiliated
+            with, endorsed by, or sponsored by PaperMC, Mojang Studios, or Microsoft.
+        </p>
+
+        <p>
+            PaperMC, Minecraft, and related names and marks are trademarks of their
+            respective owners. Use of these names does not imply any affiliation
+            or endorsement. <a href="/third-party-project-disclaimer/">
+                More information
+            </a>
+        </p>
     </div>
 
     <div class="footer-bottom">
         <span>
-            © 2026-present <a href="https://github.com/0kAj"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label="Open 0kAj GitHub profile">
-                0kAj
-            </a>
+            © 2026-present 0kAj and contributors
         </span>
 
         <span>
@@ -281,6 +301,64 @@ import {Icon as AstroIcon} from 'astro-icon/components';
             color: var(--sl-color-gray-5);
         }
 
+        /* ─────────────────────────────────────────
+           Disclaimer
+           ───────────────────────────────────────── */
+
+        .footer-legal-disclaimer {
+            position: relative;
+            z-index: 1;
+
+            display: block;
+
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+
+            padding: 1.5rem 0;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+            color: var(--sl-color-gray-3);
+
+            font-size: 0.75rem;
+            line-height: 1.6;
+
+            opacity: 1;
+        }
+
+        .footer-legal-disclaimer p {
+            display: block;
+
+            max-width: 70rem;
+            margin: 0;
+
+            color: var(--sl-color-gray-3);
+        }
+
+        .footer-legal-disclaimer p + p {
+            margin-top: 0.35rem;
+        }
+
+        .footer-legal-disclaimer a {
+            display: inline-block;
+
+            margin-top: 0.5rem;
+
+            color: var(--sl-color-gray-2);
+            text-decoration: underline;
+            text-decoration-color: var(--sl-color-gray-5);
+            text-underline-offset: 0.15em;
+
+            transition:
+                    color 0.15s ease,
+                    text-decoration-color 0.15s ease;
+        }
+
+        .footer-legal-disclaimer a:hover {
+            color: var(--sl-color-white);
+            text-decoration-color: var(--sl-color-gray-3);
+        }
 
         /* ─────────────────────────────────────────
            Bottom
@@ -300,13 +378,13 @@ import {Icon as AstroIcon} from 'astro-icon/components';
             justify-content: space-between;
             gap: 1rem;
 
-            color: var(--sl-color-gray-5);
+            color: var(--sl-color-gray-4);
 
             font-size: var(--sl-text-xs);
         }
 
         .footer-bottom a {
-            color: var(--sl-color-gray-4);
+            color: var(--sl-color-gray-3);
             text-decoration: none;
 
             transition: color 0.15s ease;
