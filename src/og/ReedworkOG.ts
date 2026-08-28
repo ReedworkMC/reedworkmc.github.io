@@ -1,11 +1,12 @@
 import type {RenderFunctionInput} from 'astro-opengraph-images';
+// @ts-ignore
 import {createElement} from 'react';
 
 const {twj} = await import('tw-to-css');
 
 export function ogLayout({
                              title,
-                             description,
+                             description, // @ts-ignore
                          }: RenderFunctionInput): Promise<React.ReactNode> {
     return Promise.resolve(
         createElement(
