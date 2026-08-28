@@ -1,6 +1,8 @@
 ---
 title: Install Reedwork for PaperMC Plugins
 description: Add Reedwork to your PaperMC plugin project using Maven or Gradle and start building plugins with dependency injection, commands, events, and custom enchantments.
+sidebar:
+    label: Installation
 ---
 
 import {FileTree, Code, Steps, Badge} from '@astrojs/starlight/components';
@@ -10,8 +12,6 @@ import AstroTabs from '../../../components/AstroTabs.astro';
 
 export const release = await getLatestReedworkRelease();
 export const { version, downloadUrl, jarName } = release;
-
-# Install Reedwork
 
 Reedwork is a Java framework for building PaperMC plugins with automatic component discovery, dependency injection, command generation, event registration, and custom Minecraft registry integration.
 

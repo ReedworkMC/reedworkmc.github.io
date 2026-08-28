@@ -41,31 +41,15 @@ export default defineConfig({
             sidebar: [
                 {
                     label: 'Getting Started',
-                    items: [
-                        {label: 'Introduction', slug: 'getting-started/introduction'},
-                        {label: 'Installation', slug: 'getting-started/installation'},
-                        {label: 'Quick Start', slug: 'getting-started/quick-start'},
-
-                    ],
+                    items: [{ autogenerate: { directory: 'getting-started' } }],
                 },
                 {
                     label: 'Features',
-                    items: [
-                        {label: 'Commands', slug: 'features/commands'},
-                        {label: 'Events', slug: 'features/events'},
-                        {label: 'Enchantments', slug: 'features/enchantments'},
-                        {label: 'Dependency Injection', slug: 'features/dependency-injection'},
-                    ],
+                    items: [{ autogenerate: { directory: 'features' } }],
                 },
                 {
                     label: 'Utilities',
-                    items: [
-                        {label: 'Utilities Overview', slug: 'utilities'},
-                        {label: 'Bedrock Utils', slug: 'utilities/bedrock-utils'},
-                        {label: 'Bukkit to String', slug: 'utilities/bukkit-to-string'},
-                        {label: 'Color Utils', slug: 'utilities/color-utils'},
-                        {label: 'Colorfulness Finder', slug: 'utilities/colorfulness-finder'},
-                    ],
+                    items: [{ autogenerate: { directory: 'utilities' } }],
                 },
                 {
                     label: 'Tutorials',

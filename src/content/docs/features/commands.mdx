@@ -1,6 +1,8 @@
 ---
 title: PaperMC Commands with Java and Brigadier
 description: Build PaperMC commands with Java annotations, automatic Brigadier argument mapping, permissions, aliases, suggestions, cooldowns, and typed parameters.
+sidebar:
+    label: Commands
 ---
 
 import {Aside, Code} from "@astrojs/starlight/components";
@@ -8,8 +10,6 @@ import {getExample} from "@lib/github";
 
 export const commandCode = await getExample("CommandExample/src/main/java/dev/reedworkmc/examples/command/commands/HelloReedworkCommand.java");
 export const pluginCode = await getExample("CommandExample/src/main/java/dev/reedworkmc/examples/command/CommandExample.java");
-
-# PaperMC Commands with Java and Brigadier
 
 Reedwork lets you build **PaperMC commands in Java** using annotations instead of manually constructing Brigadier command nodes and registering every command component yourself.
 

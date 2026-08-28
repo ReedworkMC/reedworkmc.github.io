@@ -1,6 +1,8 @@
 ---
 title: Custom Enchantments for PaperMC Plugins
 description: Create and automatically register custom Minecraft enchantments in PaperMC plugins with Reedwork using CustomEnchantment, bootstrap scanning, and Paper's registry system.
+sidebar:
+    label: Enchantments
 ---
 
 import {Code} from "@astrojs/starlight/components";
@@ -9,8 +11,6 @@ import {getExample} from "@lib/github";
 export const enchantmentCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/ReedworkEnchantment.java");
 export const pluginYmlCode = await getExample("EnchantmentExample/src/main/resources/paper-plugin.yml");
 export const bootstrapCode = await getExample("EnchantmentExample/src/main/java/dev/reedworkmc/examples/enchantment/EnchantmentExampleBootstrap.java");
-
-# Custom Enchantments for PaperMC Plugins
 
 Reedwork lets you define **custom Minecraft enchantments as regular Java classes** and automatically register them through Paper's bootstrap lifecycle.
 

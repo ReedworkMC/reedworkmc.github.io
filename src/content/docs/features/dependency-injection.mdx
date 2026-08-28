@@ -1,6 +1,8 @@
 ---
 title: Dependency Injection for PaperMC Plugins
 description: Add dependency injection to PaperMC plugins with constructor injection, singleton and transient components, external bindings, factories, and named dependencies.
+sidebar:
+    label: Dependency Injection
 ---
 
 import {Code} from "@astrojs/starlight/components";
@@ -10,8 +12,6 @@ export const pluginCode = await getExample("DependencyInjectionExample/src/main/
 export const counterCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/ExecuteCounter.java");
 export const greeterCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/services/GreeterService.java");
 export const commandCode = await getExample("DependencyInjectionExample/src/main/java/dev/reedworkmc/examples/dependencyinjection/commands/ReedworkCommand.java");
-
-# Dependency Injection for PaperMC Plugins
 
 Reedwork provides **dependency injection for PaperMC plugins**, allowing Java components to receive their dependencies automatically through constructor injection.
 
