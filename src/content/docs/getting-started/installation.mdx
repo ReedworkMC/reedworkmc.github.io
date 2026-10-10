@@ -50,13 +50,15 @@ Install the downloaded JAR:
 2.
     Install the file into your local Maven repository:
 
-    <Code lang="bash" code={`
+    Replace `<PATH_TO_DOWNLOADED_JAR>` with the actual path to the directory containing the downloaded JAR file.
+
+    <Code lang="bash" mark={"<PATH_TO_DOWNLOADED_JAR>"} code={`
 mvn install:install-file \
-    -Dfile=<PATH_TO_DOWNLOADED_JAR>/${jarName} \
-    -DgroupId=dev.reedworkmc \
-    -DartifactId=reedwork \
-    -Dversion=${version} \
-    -Dpackaging=jar
+    -Dfile="<PATH_TO_DOWNLOADED_JAR>/${jarName}" \
+    -DgroupId="dev.reedworkmc" \
+    -DartifactId="reedwork" \
+    -Dversion="${version}" \
+    -Dpackaging="jar"
 `}
     />
 
