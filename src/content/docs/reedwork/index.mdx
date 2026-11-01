@@ -8,7 +8,7 @@ hero:
     tagline: Build plugins with less boilerplate and focus on the features that matter.
     actions:
       - text: Get Started
-        link: /getting-started/introduction/
+        link: /reedwork/getting-started/introduction/
         icon: right-arrow
       - text: View on GitHub
         link: https://github.com/ReedworkMC/Reedwork
@@ -35,39 +35,39 @@ Instead of manually connecting commands, listeners, services, and other plugin c
 
 <CardGrid stagger>
 
-    <AstroIconLinkCard title="Dependency Injection" href="/features/dependency-injection/" icon="mdi:needle">
+    <AstroIconLinkCard title="Dependency Injection" href="/reedwork/features/dependency-injection/" icon="mdi:needle">
         Resolve constructor dependencies automatically across commands, event listeners, services, and other Reedwork components.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Annotation-Based Commands" href="/features/commands/" icon="mdi:console-line">
+    <AstroIconLinkCard title="Annotation-Based Commands" href="/reedwork/features/commands/" icon="mdi:console-line">
         Define Paper commands and subcommands with annotations instead of manually building and registering command structures.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Automatic Event Registration" href="/features/events/" icon="mdi:event-search">
+    <AstroIconLinkCard title="Automatic Event Registration" href="/reedwork/features/events/" icon="mdi:event-search">
         Discover Bukkit and Paper event listeners automatically and register them during plugin startup.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Custom Enchantments" href="/features/enchantments/" icon="mdi:stars">
+    <AstroIconLinkCard title="Custom Enchantments" href="/reedwork/features/enchantments/" icon="mdi:stars">
         Define custom Minecraft enchantments as Java classes and register them through Paper's registry lifecycle.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Brigadier Integration" href="/features/commands/#automatic-brigadier-argument-mapping" icon="mdi:lightning-bolt">
+    <AstroIconLinkCard title="Brigadier Integration" href="/reedwork/features/commands/#automatic-brigadier-argument-mapping" icon="mdi:lightning-bolt">
         Build Paper Brigadier commands with Java classes, annotations, and strongly typed command parameters.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Automatic Parameter Resolution" href="/features/commands/#supported-parameter-types" icon="mdi:cached">
+    <AstroIconLinkCard title="Automatic Parameter Resolution" href="/reedwork/features/commands/#supported-parameter-types" icon="mdi:cached">
         Map Java method parameters to supported Paper command arguments and receive resolved values directly in command handlers.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Custom Suggestions" href="/features/commands/#custom-command-suggestions" icon="mdi:lightbulb-on-outline">
+    <AstroIconLinkCard title="Custom Suggestions" href="/reedwork/features/commands/#custom-command-suggestions" icon="mdi:lightbulb-on-outline">
         Add application-specific command suggestions using suggestion providers and Reedwork's dependency injection system.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Automatic Usage Generation" href="/features/commands/#command-usage" icon="mdi:account-help">
+    <AstroIconLinkCard title="Automatic Usage Generation" href="/reedwork/features/commands/#command-usage" icon="mdi:account-help">
         Generate command usage information automatically from the structure of your registered commands.
     </AstroIconLinkCard>
 
-    <AstroIconLinkCard title="Developer Utilities" href="/utilities/" icon="mdi:help-outline">
+    <AstroIconLinkCard title="Developer Utilities" href="/reedwork/utilities/" icon="mdi:help-outline">
         Reuse utilities for common Bukkit and Paper plugin development tasks instead of rebuilding them for every plugin.
     </AstroIconLinkCard>
 
@@ -130,7 +130,7 @@ Command metadata such as descriptions, permissions, cooldowns, aliases, and usag
 
 Usage information can also be generated automatically from the registered command structure.
 
-Learn more about the [Reedwork command system](/features/commands/).
+Learn more about the [Reedwork command system](/reedwork/features/commands/).
 
 ## Dependency injection for Paper plugins
 
@@ -162,7 +162,7 @@ This keeps dependencies explicit and avoids service locators or large amounts of
 
 Reedwork supports singleton and transient component lifecycles as well as explicit bindings for external classes.
 
-Read the [dependency injection documentation](/features/dependency-injection/) to learn how component resolution works.
+Read the [dependency injection documentation](/reedwork/features/dependency-injection/) to learn how component resolution works.
 
 ## Commands, events, and enchantments
 
@@ -174,7 +174,7 @@ Define commands and subcommands using Java classes and annotations while Reedwor
 
 Supported Java parameters can be resolved automatically, allowing command handlers to work with typed values instead of parsing raw command input.
 
-Explore [annotation-based commands and Brigadier integration](/features/commands/).
+Explore [annotation-based commands and Brigadier integration](/reedwork/features/commands/).
 
 ### Automatic event registration
 
@@ -182,13 +182,13 @@ Write regular Bukkit or Paper event listeners and mark them for Reedwork discove
 
 Reedwork scans your plugin components and registers supported listeners automatically.
 
-See [automatic event registration](/features/events/).
+See [automatic event registration](/reedwork/features/events/).
 
 ### Custom enchantments
 
 Define custom Minecraft enchantments as Java components and let Reedwork integrate them with Paper's registry lifecycle.
 
-Learn more about [custom enchantments](/features/enchantments/).
+Learn more about [custom enchantments](/reedwork/features/enchantments/).
 
 ## How Reedwork works
 
@@ -258,19 +258,19 @@ The goal is to remove the repetitive infrastructure that surrounds your Paper pl
 
 ## Start building your PaperMC plugin
 
-Start with the [Reedwork introduction](/getting-started/introduction/) to understand the framework and its core concepts.
+Start with the [Reedwork introduction](/reedwork/getting-started/introduction/) to understand the framework and its core concepts.
 
-Then follow the [installation guide](/getting-started/installation/) and continue with the [quick start](/getting-started/quick-start/) to build your first plugin.
+Then follow the [installation guide](/reedwork/getting-started/installation/) and continue with the [quick start](/reedwork/getting-started/quick-start/) to build your first plugin.
 
-<LinkButton icon="right-arrow" href="/getting-started/introduction/">Get started with Reedwork</LinkButton>
+<LinkButton icon="right-arrow" href="/reedwork/getting-started/introduction/">Get started with Reedwork</LinkButton>
 <LinkButton icon="external" iconPlacement="end" href="https://github.com/ReedworkMC/Reedwork" variant="secondary">View Reedwork on GitHub</LinkButton>
 
 ## Explore Reedwork
 
 Continue exploring the framework through the main feature areas:
 
-- [Commands and Brigadier integration](/features/commands/)
-- [Dependency injection](/features/dependency-injection/)
-- [Automatic event registration](/features/events/)
-- [Custom enchantments](/features/enchantments/)
-- [Developer utilities](/utilities/)
+- [Commands and Brigadier integration](/reedwork/features/commands/)
+- [Dependency injection](/reedwork/features/dependency-injection/)
+- [Automatic event registration](/reedwork/features/events/)
+- [Custom enchantments](/reedwork/features/enchantments/)
+- [Developer utilities](/reedwork/utilities/)

@@ -74,7 +74,7 @@ The input array is not modified.
 
 ## Use ColorfulnessFinder with ColorUtils
 
-`ColorfulnessFinder` is particularly useful together with [ColorUtils](../color-utils/).
+`ColorfulnessFinder` is particularly useful together with [ColorUtils](/reedwork/utilities/color-utils/).
 
 For example, an application can first select two strong colors and then use them to generate an Adventure text gradient:
 
@@ -101,7 +101,7 @@ This separates the two operations:
 1. `ColorfulnessFinder` selects the strongest candidate colors.
 2. `ColorUtils` applies those colors to Adventure text.
 
-For image-based color extraction, see [`extractTwoColors`](../color-utils/#extract-colors-from-an-image) in [ColorUtils](../color-utils/).
+For image-based color extraction, see [`extractTwoColors`](/reedwork/utilities/color-utils/#extract-colors-from-an-image) in [ColorUtils](/reedwork/utilities/color-utils/).
 
 ## API
 
@@ -135,18 +135,8 @@ Typical use cases include:
 - generating dynamic UI colors;
 - choosing representative colors from a collection.
 
-For general Bukkit color operations, see [Color Utilities](../color-utils/).
+For general Bukkit color operations, see [Color Utilities](/reedwork/utilities/color-utils/).
 
-## Summary
+## Related utilities
 
-`ColorfulnessFinder` provides a focused color-selection operation for Bukkit colors.
-
-It:
-
-- converts RGB colors into HSL;
-- calculates a colorfulness score from saturation and lightness;
-- ranks candidate colors by that score;
-- returns the two highest-scoring colors;
-- can be combined with `ColorUtils` for gradient generation.
-
-For the complete collection of Reedwork utilities, see the [PaperMC Plugin Utilities](../).
+For more PaperMC and Bukkit utilities, see the [Reedwork utility collection](/reedwork/utilities/).

@@ -40,40 +40,76 @@ export default defineConfig({
 
             sidebar: [
                 {
-                    label: 'Getting Started',
-                    items: [{ autogenerate: { directory: 'getting-started' } }],
-                },
-                {
-                    label: 'Features',
-                    items: [{ autogenerate: { directory: 'features' } }],
-                },
-                {
-                    label: 'Utilities',
-                    items: [{ autogenerate: { directory: 'utilities' } }],
-                },
-                {
-                    label: 'Tutorials',
+                    label: 'Reedwork',
                     items: [
                         {
-                            label: 'Learn Reedwork in 5 Minutes', items: [
+                            label: 'Getting Started',
+                            items: [{autogenerate: {directory: 'reedwork/getting-started'}}],
+                        },
+                        {
+                            label: 'Features',
+                            items: [{autogenerate: {directory: 'reedwork/features'}}],
+                        },
+                        {
+                            label: 'Utilities',
+                            items: [{autogenerate: {directory: 'reedwork/utilities'}}],
+                        },
+                        {
+                            label: 'Tutorials',
+                            items: [
                                 {
-                                    label: 'Create a PaperMC Brigadier Command',
-                                    slug: 'tutorials/five-minute-command',
-                                },
-                                {
-                                    label: 'Create a PaperMC Event Listener',
-                                    slug: 'tutorials/five-minute-event-listener',
-                                },
-                                {
-                                    label: 'Create a PaperMC Custom Enchantment',
-                                    slug: 'tutorials/five-minute-enchantment',
+                                    label: 'Learn Reedwork in 5 Minutes', items: [
+                                        {
+                                            label: 'Create a PaperMC Brigadier Command',
+                                            slug: 'reedwork/tutorials/five-minute-command',
+                                        },
+                                        {
+                                            label: 'Create a PaperMC Event Listener',
+                                            slug: 'reedwork/tutorials/five-minute-event-listener',
+                                        },
+                                        {
+                                            label: 'Create a PaperMC Custom Enchantment',
+                                            slug: 'reedwork/tutorials/five-minute-enchantment',
+                                        },
+                                    ],
                                 },
                             ],
                         },
                     ],
                 },
                 {
-                    label: 'PaperMC Documentation',
+                    label: 'ReedworkConfig - coming soon...',
+                    items: [
+                        // {
+                        //     label: 'Getting Started',
+                        //     items: [{autogenerate: {directory: 'reedwork-config/getting-started'}}],
+                        // },
+                        // {
+                        //     label: 'Features',
+                        //     items: [{autogenerate: {directory: 'reedwork-config/features'}}],
+                        // },
+                        // {
+                        //     label: 'Tutorials',
+                        //     items: [
+                        //         {
+                        //             label: 'Learn ReedworkConfig in 5 Minutes', items: [
+                        //                 {
+                        //                     label: 'Create a PaperMC Player YML-Configuration',
+                        //                     slug: 'reedwork-config/tutorials/five-minute-player-yml-configuration',
+                        //                 },
+                        //                 {
+                        //                     label: 'Create a PaperMC YML-Configuration',
+                        //                     slug: 'reedwork-config/tutorials/five-minute-event-yml-configuration',
+                        //                 },
+                        //             ],
+                        //         },
+                        //     ],
+                        // },
+                    ],
+                },
+
+                {
+                    label: 'Official PaperMC Documentation',
                     link: 'https://docs.papermc.io/paper/',
                 },
             ],

@@ -7,8 +7,8 @@ sidebar:
 
 import {FileTree, Code, Steps, Badge} from '@astrojs/starlight/components';
 import {getLatestReedworkRelease} from '@lib/reedwork-release';
-import AstroTabItem from '../../../components/AstroTabItem.astro';
-import AstroTabs from '../../../components/AstroTabs.astro';
+import AstroTabItem from '../../../../components/AstroTabItem.astro';
+import AstroTabs from '../../../../components/AstroTabs.astro';
 
 export const release = await getLatestReedworkRelease();
 export const { version, downloadUrl, jarName } = release;
@@ -224,14 +224,14 @@ import dev.reedworkmc.reedwork.Reedwork;
 
 You can now initialize Reedwork and start using features such as:
 
-- [Dependency Injection](../dependency-injection/)
-- [Events](../events/)
-- [Commands](../commands/)
-- [Enchantments](../enchantments/)
-- [Utilities](/utilities/)
+- [Dependency Injection](/reedwork/features/dependency-injection/)
+- [Events](/reedwork/features/events/)
+- [Commands](/reedwork/features/commands/)
+- [Enchantments](/reedwork/features/enchantments/)
+- [Utilities](/reedwork/utilities/)
 
 ## Next steps
 
 Reedwork is now installed in your PaperMC plugin project.
 
-Continue with the [Quick Start](/getting-started/quick-start/) guide to create your first Reedwork-powered plugin.
+Continue with the [Quick Start](/reedwork/getting-started/quick-start/) guide to create your first Reedwork-powered plugin.

@@ -249,7 +249,7 @@ Reedwork can inject dependencies into its managed components, including:
 - suggestion providers
 - other Reedwork-managed components
 
-For example, a [Reedwork command](../commands/) can depend directly on an application service:
+For example, a [Reedwork command](/reedwork/features/commands/) can depend directly on an application service:
 
 ```java
 public final class HelloCommand {
@@ -264,7 +264,7 @@ public final class HelloCommand {
 
 The command declares its dependency without needing to construct `GreeterService` itself.
 
-The same approach can be used when building [Paper event listeners](../events/) and other components managed by Reedwork.
+The same approach can be used when building [Paper event listeners](/reedwork/features/events/) and other components managed by Reedwork.
 
 ## Why use dependency injection in a PaperMC plugin?
 
@@ -383,11 +383,11 @@ Dependency injection becomes especially useful when combined with Reedwork's oth
 
 Explore:
 
-- [Commands](../commands/) — build PaperMC commands with Java annotations and automatic parameter resolution.
-- [Events](../events/) — automatically discover and register Bukkit and Paper event listeners.
-- [Enchantments](../enchantments/) — create and register custom Minecraft enchantments.
-- [Utilities](/utilities/) — use reusable utilities for Paper plugin development.
+- [Commands](/reedwork/features/commands/) — build PaperMC commands with Java annotations and automatic parameter resolution.
+- [Events](/reedwork/features/events/) — automatically discover and register Bukkit and Paper event listeners.
+- [Enchantments](/reedwork/features/enchantments/) — create and register custom Minecraft enchantments.
+- [Utilities](/reedwork/utilities/) — use reusable utilities for Paper plugin development.
 
-If you are new to Reedwork, start with the [introduction](../../getting-started/introduction/) and then follow the [installation guide](../../getting-started/installation/).
+If you are new to Reedwork, start with the [introduction](/reedwork/getting-started/introduction/) and then follow the [installation guide](/reedwork/getting-started/installation/).
 
 The complete runnable dependency injection example is available in the [ReedworkExamples repository](https://github.com/ReedworkMC/ReedworkExamples).
