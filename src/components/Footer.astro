@@ -2,29 +2,54 @@
 import {Icon as AstroIcon} from 'astro-icon/components';
 ---
 
-<footer class="site-footer" aria-label="Reedwork website footer">
+<footer class="site-footer" aria-label="ReedworkMC website footer">
     <div class="footer-glow" aria-hidden="true"></div>
 
     <div class="footer-content">
+        <!-- Brand -->
         <div class="footer-brand">
             <div class="brand">
-                <span>Reedwork</span>
+                <span>ReedworkMC</span>
             </div>
 
             <p class="footer-description">
-                A modern PaperMC plugin framework for Java.
+                Open-source tools, libraries and frameworks for Minecraft
+                and PaperMC development.
             </p>
 
             <p class="footer-subdescription">
-                Build plugins with less boilerplate and focus on the features
-                that matter.
+                Created by 0kAj. Built openly for Minecraft developers,
+                with contributions from the community.
             </p>
 
             <div class="footer-status">
-                <span>JAVA · PAPER · PLUGINS</span>
+                <span>MINECRAFT · PAPERMC · JAVA · OPEN SOURCE</span>
             </div>
         </div>
 
+        <!-- Projects -->
+        <div class="footer-column">
+            <h2>Projects</h2>
+
+            <a href="/reedwork/">
+                <AstroIcon name="mdi:code"/>
+                <span>Reedwork</span>
+            </a>
+
+            <div class="footer-coming-soon">
+                <AstroIcon name="mdi:database"/>
+                <span>ReedworkConfig</span>
+                <span class="coming-soon-label">Soon</span>
+            </div>
+
+            <div class="footer-coming-soon">
+                <AstroIcon name="mdi:help-outline"/>
+                <span>ReedworkUtils</span>
+                <span class="coming-soon-label">Soon</span>
+            </div>
+        </div>
+
+        <!-- Resources -->
         <div class="footer-column">
             <h2>Resources</h2>
 
@@ -33,52 +58,40 @@ import {Icon as AstroIcon} from 'astro-icon/components';
                 <span>Documentation</span>
             </a>
 
-            <a href="https://github.com/ReedworkMC/Reedwork"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Open Reedwork source repository on GitHub">
-                <AstroIcon name="mdi:github" class="link-icon"/>
-                <span>GitHub</span>
-                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
-            </a>
-
             <a href="https://github.com/ReedworkMC/ReedworkExamples"
                target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Open Reedwork PaperMC plugin examples on GitHub">
-                <AstroIcon name="mdi:github" class="link-icon"/>
-                <span>Reedwork PaperMC examples</span>
+               rel="noopener noreferrer">
+                <AstroIcon name="mdi:github"/>
+                <span>Examples</span>
                 <AstroIcon name="mdi:open-in-new" class="external-icon"/>
             </a>
 
             <a href="https://github.com/ReedworkMC/Reedwork/releases"
                target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Open Reedwork releases on GitHub">
-                <AstroIcon name="mdi:tag-outline" class="link-icon"/>
+               rel="noopener noreferrer">
+                <AstroIcon name="mdi:tag-outline"/>
                 <span>Releases</span>
+                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
+            </a>
+
+            <a href="https://github.com/ReedworkMC"
+               target="_blank"
+               rel="noopener noreferrer">
+                <AstroIcon name="mdi:github"/>
+                <span>GitHub</span>
                 <AstroIcon name="mdi:open-in-new" class="external-icon"/>
             </a>
         </div>
 
+        <!-- Community & Legal -->
         <div class="footer-column">
-            <h2>Project</h2>
+            <h2>Community</h2>
 
             <a href="https://github.com/ReedworkMC/Reedwork?tab=contributing-ov-file"
                target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Read the Reedwork contribution guidelines on GitHub">
+               rel="noopener noreferrer">
                 <AstroIcon name="mdi:source-pull"/>
                 <span>Contributing</span>
-                <AstroIcon name="mdi:open-in-new" class="external-icon"/>
-            </a>
-
-            <a href="https://github.com/ReedworkMC/Reedwork?tab=LGPL-3.0-1-ov-file"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Read the Reedwork license on GitHub">
-                <AstroIcon name="mdi:license"/>
-                <span>License</span>
                 <AstroIcon name="mdi:open-in-new" class="external-icon"/>
             </a>
 
@@ -91,24 +104,34 @@ import {Icon as AstroIcon} from 'astro-icon/components';
                 <AstroIcon name="mdi:security"/>
                 <span>Privacy Policy</span>
             </a>
+
+            <a href="/third-party-project-disclaimer/">
+                <AstroIcon name="mdi:information-outline"/>
+                <span>Third-party Disclaimer</span>
+            </a>
         </div>
     </div>
 
+    <!-- Legal Disclaimer -->
     <div class="footer-legal-disclaimer">
         <p>
-            Reedwork is an independent open-source project and is not affiliated
-            with, endorsed by, or sponsored by PaperMC, Mojang Studios, or Microsoft.
+            ReedworkMC is an independent open-source development project
+            and is not affiliated with, endorsed by, or sponsored by
+            PaperMC, Mojang Studios, or Microsoft.
         </p>
 
         <p>
-            PaperMC, Minecraft, and related names and marks are trademarks of their
-            respective owners. Use of these names does not imply any affiliation
-            or endorsement. <a href="/third-party-project-disclaimer/">
-                More information
+            ReedworkMC is an independent, privately maintained open-source project and is not affiliated with, endorsed by, or sponsored by PaperMC, Mojang Studios, or Microsoft.
+            <br>
+            Minecraft, PaperMC, and related names, logos, and marks are trademarks of their respective owners. References to these names do not imply any affiliation or endorsement.
+            <br>
+            <a href="/third-party-project-disclaimer/">
+                Third-party disclaimer
             </a>
         </p>
     </div>
 
+    <!-- Footer Bottom -->
     <div class="footer-bottom">
         <span>
             © 2026-present 0kAj and contributors
@@ -175,9 +198,39 @@ import {Icon as AstroIcon} from 'astro-icon/components';
             padding: 4rem 0 3.5rem;
 
             display: grid;
+            grid-template-columns:
+                minmax(0, 1.7fr)
+                repeat(3, minmax(0, 1fr));
+            gap: 3rem;
+        }
 
-            grid-template-columns: minmax(0, 1.7fr) minmax(10rem, 1fr) minmax(8rem, 1fr);
-            gap: 4rem;
+        .footer-coming-soon {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+
+            min-width: 0;
+
+            color: var(--sl-color-gray-4);
+            font-size: var(--sl-text-sm);
+            line-height: 1.5;
+            opacity: 0.7;
+        }
+
+        .footer-coming-soon svg {
+            width: 1.05em;
+            height: 1.05em;
+            flex-shrink: 0;
+        }
+
+        .coming-soon-label {
+            margin-left: auto;
+
+            color: var(--sl-color-gray-5);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
         /* ─────────────────────────────────────────
@@ -397,27 +450,25 @@ import {Icon as AstroIcon} from 'astro-icon/components';
         /* ─────────────────────────────────────────
            Responsive
            ───────────────────────────────────────── */
-        @media (max-width: 700px) {
-            .site-footer {
-                margin-top: 4rem;
-                padding-inline: 1rem;
+        @media (max-width: 900px) {
+            .footer-content {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 2.5rem;
             }
 
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 700px) {
             .footer-content {
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
-
-                padding: 3rem 0;
             }
 
-            .footer-bottom {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 0.6rem;
-            }
-
-            .footer-tech {
-                display: none;
+            .footer-brand {
+                grid-column: auto;
             }
         }
     }

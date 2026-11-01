@@ -1,8 +1,8 @@
-import type {RenderFunctionInput} from 'astro-opengraph-images';
+import type { RenderFunctionInput } from 'astro-opengraph-images';
 // @ts-ignore
-import {createElement} from 'react';
+import { createElement } from 'react';
 
-const {twj} = await import('tw-to-css');
+const { twj } = await import('tw-to-css');
 
 export function ogLayout({
                              title,
@@ -24,9 +24,7 @@ export function ogLayout({
             // Ambient glow — top right
             createElement('div', {
                 style: {
-                    ...twj(
-                        'absolute rounded-full pointer-events-none',
-                    ),
+                    ...twj('absolute rounded-full pointer-events-none'),
                     width: '720px',
                     height: '720px',
                     right: '-280px',
@@ -40,9 +38,7 @@ export function ogLayout({
             // Ambient glow — bottom left
             createElement('div', {
                 style: {
-                    ...twj(
-                        'absolute rounded-full pointer-events-none',
-                    ),
+                    ...twj('absolute rounded-full pointer-events-none'),
                     width: '600px',
                     height: '600px',
                     left: '-300px',
@@ -56,9 +52,7 @@ export function ogLayout({
             // Technical grid
             createElement('div', {
                 style: {
-                    ...twj(
-                        'absolute inset-0 pointer-events-none',
-                    ),
+                    ...twj('absolute inset-0 pointer-events-none'),
                     opacity: 0.16,
                     backgroundImage:
                         'linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px)',
@@ -77,9 +71,7 @@ export function ogLayout({
                     ),
                 },
 
-                // ─────────────────────────────────────────────
                 // Header
-                // ─────────────────────────────────────────────
                 createElement(
                     'div',
                     {
@@ -88,16 +80,13 @@ export function ogLayout({
                         ),
                     },
 
-                    // Reedwork brand + framework label
+                    // ReedworkMC brand
                     createElement(
                         'div',
                         {
-                            style: twj(
-                                'flex flex-col',
-                            ),
+                            style: twj('flex flex-col'),
                         },
 
-                        // Reedwork brand
                         createElement(
                             'span',
                             {
@@ -113,18 +102,16 @@ export function ogLayout({
                                     color: 'transparent',
                                 },
                             },
-                            'REEDWORK',
+                            'REEDWORKMC',
                         ),
 
-                        // Plugin framework label
+                        // Minecraft development label
                         createElement(
                             'div',
                             {
-                                style: {
-                                    ...twj(
-                                        'flex flex-row items-center mt-3',
-                                    ),
-                                },
+                                style: twj(
+                                    'flex flex-row items-center mt-3',
+                                ),
                             },
 
                             createElement('div', {
@@ -145,12 +132,12 @@ export function ogLayout({
                                         'text-[16px] text-slate-500 font-bold tracking-[0.22em] uppercase',
                                     ),
                                 },
-                                'PLUGIN FRAMEWORK',
+                                'MINECRAFT DEVELOPMENT',
                             ),
                         ),
                     ),
 
-                    // Platform badge
+                    // Open source badge
                     createElement(
                         'div',
                         {
@@ -171,8 +158,9 @@ export function ogLayout({
                                 style: twj(
                                     'text-[20px] text-slate-300 font-semibold tracking-[0.12em] uppercase',
                                 ),
+                                color: '#ffffff',
                             },
-                            'BUILT FOR',
+                            'OPEN SOURCE',
                         ),
 
                         createElement(
@@ -186,20 +174,16 @@ export function ogLayout({
                                     marginLeft: '8px',
                                 },
                             },
-                            'PAPERMC',
+                            'PROJECT',
                         ),
                     ),
                 ),
 
-                // ─────────────────────────────────────────────
                 // Main content
-                // ─────────────────────────────────────────────
                 createElement(
                     'div',
                     {
-                        style: twj(
-                            'flex flex-col max-w-[1950px]',
-                        ),
+                        style: twj('flex flex-col max-w-[1950px]'),
                     },
 
                     // Title
@@ -223,9 +207,7 @@ export function ogLayout({
                         'p',
                         {
                             style: {
-                                ...twj(
-                                    'font-medium m-0',
-                                ),
+                                ...twj('font-medium m-0'),
                                 fontSize: '30px',
                                 lineHeight: '1.4',
                                 maxWidth: '1450px',
@@ -237,9 +219,7 @@ export function ogLayout({
                     ),
                 ),
 
-                // ─────────────────────────────────────────────
                 // Footer
-                // ─────────────────────────────────────────────
                 createElement(
                     'div',
                     {
@@ -251,9 +231,7 @@ export function ogLayout({
                     createElement(
                         'div',
                         {
-                            style: twj(
-                                'flex flex-col',
-                            ),
+                            style: twj('flex flex-col'),
                         },
 
                         createElement('div', {
@@ -273,7 +251,7 @@ export function ogLayout({
                                     'text-[21px] text-slate-500 font-medium tracking-wide',
                                 ),
                             },
-                            'A modern PaperMC plugin framework',
+                            'Open-source tools for Minecraft developers',
                         ),
                     ),
 
@@ -293,7 +271,7 @@ export function ogLayout({
                                     'text-[18px] text-slate-600 font-semibold tracking-[0.16em] uppercase',
                                 ),
                             },
-                            'JAVA · PAPER · PLUGINS',
+                            'MINECRAFT · PAPERMC · JAVA',
                         ),
                     ),
                 ),

@@ -3,20 +3,27 @@ title: Legal Notice
 template: splash
 ---
 
-Reedwork is a free and open-source project for PaperMC plugin development.
+ReedworkMC is a privately maintained, non-commercial open-source project focused on tools, libraries, and frameworks for Minecraft and PaperMC development.
 
-The project is privately maintained and operated on a non-commercial basis. Reedwork does not offer paid products or services.
+The project is independently operated by 0kAj. It is not a registered company or commercial service provider.
 
-## Project
+## Projects
 
-The Reedwork source code, examples, and project information are available on GitHub:
+The source code, documentation, examples, and project information are available through GitHub:
 
-* [Reedwork](https://github.com/ReedworkMC/Reedwork)
-* [Reedwork Examples](https://github.com/ReedworkMC/ReedworkExamples)
+- [Reedwork](https://github.com/ReedworkMC/Reedwork) – A modern PaperMC plugin framework for Java.
+- [Reedwork Examples](https://github.com/ReedworkMC/ReedworkExamples) – Example implementations and usage of Reedwork.
+- [ReedworkMC on GitHub](https://github.com/ReedworkMC) – Organization and project repositories.
+
+## Website
+
+This website and its documentation are open source. The source code is available on GitHub:
+
+- [ReedworkMC Website](https://github.com/ReedworkMC/reedworkmc.github.io)
 
 ## Contact
 
-For general questions, bug reports, feature requests, and contributions, please use the [Reedwork GitHub repository](https://github.com/ReedworkMC/Reedwork).
+For general questions, bug reports, feature requests, and contributions, please use the relevant GitHub repository.
 
 For private matters, you can contact:
 

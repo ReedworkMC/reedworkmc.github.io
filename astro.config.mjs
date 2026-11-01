@@ -1,25 +1,26 @@
 // @ts-check
-import {defineConfig} from 'astro/config';
+import { defineConfig } from 'astro/config';
+
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
-
 import icon from 'astro-icon';
-
 import mdx from '@astrojs/mdx';
-import opengraphImages from "astro-opengraph-images";
-import * as fs from "fs";
+import opengraphImages from 'astro-opengraph-images';
 
-import {ogLayout} from "@/og/ReedworkOG.ts";
+import * as fs from 'fs';
+
+import { ogLayout } from '@/og/ReedworkMC-OG.ts';
 
 export default defineConfig({
     site: 'https://reedworkmc.github.io/',
 
     integrations: [
         sitemap(),
+
         starlight({
-            title: 'Reedwork',
+            title: 'ReedworkMC',
             description:
-                'A modern framework for building PaperMC plugins with less boilerplate.',
+                'Open-source tools, libraries and frameworks for Minecraft and PaperMC development. Created by 0kAj and built together with the community.',
 
             components: {
                 Head: '@components/Head.astro',
@@ -27,14 +28,14 @@ export default defineConfig({
             },
 
             customCss: [
-                '@/styles/default.css'
+                '@/styles/default.css',
             ],
 
             social: [
                 {
                     icon: 'github',
                     label: 'GitHub',
-                    href: 'https://github.com/ReedworkMC/Reedwork',
+                    href: 'https://github.com/ReedworkMC',
                 },
             ],
 
@@ -44,15 +45,33 @@ export default defineConfig({
                     items: [
                         {
                             label: 'Getting Started',
-                            items: [{autogenerate: {directory: 'reedwork/getting-started'}}],
+                            items: [
+                                {
+                                    autogenerate: {
+                                        directory: 'reedwork/getting-started',
+                                    },
+                                },
+                            ],
                         },
                         {
                             label: 'Features',
-                            items: [{autogenerate: {directory: 'reedwork/features'}}],
+                            items: [
+                                {
+                                    autogenerate: {
+                                        directory: 'reedwork/features',
+                                    },
+                                },
+                            ],
                         },
                         {
                             label: 'Utilities',
-                            items: [{autogenerate: {directory: 'reedwork/utilities'}}],
+                            items: [
+                                {
+                                    autogenerate: {
+                                        directory: 'reedwork/utilities',
+                                    },
+                                },
+                            ],
                         },
                         {
                             label: 'Tutorials',
@@ -77,45 +96,40 @@ export default defineConfig({
                         },
                     ],
                 },
+
                 {
-                    label: 'ReedworkConfig - coming soon...',
+                    label: 'More Projects',
                     items: [
-                        // {
-                        //     label: 'Getting Started',
-                        //     items: [{autogenerate: {directory: 'reedwork-config/getting-started'}}],
-                        // },
-                        // {
-                        //     label: 'Features',
-                        //     items: [{autogenerate: {directory: 'reedwork-config/features'}}],
-                        // },
-                        // {
-                        //     label: 'Tutorials',
-                        //     items: [
-                        //         {
-                        //             label: 'Learn ReedworkConfig in 5 Minutes', items: [
-                        //                 {
-                        //                     label: 'Create a PaperMC Player YML-Configuration',
-                        //                     slug: 'reedwork-config/tutorials/five-minute-player-yml-configuration',
-                        //                 },
-                        //                 {
-                        //                     label: 'Create a PaperMC YML-Configuration',
-                        //                     slug: 'reedwork-config/tutorials/five-minute-event-yml-configuration',
-                        //                 },
-                        //             ],
-                        //         },
-                        //     ],
-                        // },
+                        {
+                            label: 'ReedworkConfig · Coming Soon',
+                            link: '/#projects',
+                        },
+                        {
+                            label: 'ReedworkUtils · Coming Soon',
+                            link: '/#projects',
+                        },
                     ],
                 },
 
                 {
-                    label: 'Official PaperMC Documentation',
-                    link: 'https://docs.papermc.io/paper/',
+                    label: 'External Resources',
+                    items: [
+                        {
+                            label: 'Official PaperMC Documentation',
+                            link: 'https://docs.papermc.io/paper/',
+                        },
+                        {
+                            label: 'ReedworkMC on GitHub',
+                            link: 'https://github.com/ReedworkMC',
+                        },
+                    ],
                 },
             ],
         }),
+
         icon(),
         mdx(),
+
         opengraphImages({
             options: {
                 fonts: [
@@ -123,11 +137,13 @@ export default defineConfig({
                         name: 'Roboto',
                         weight: 400,
                         style: 'normal',
-                        data: fs.readFileSync("node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff"),
-                    }
+                        data: fs.readFileSync(
+                            'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff',
+                        ),
+                    },
                 ],
             },
-            render: ogLayout
+            render: ogLayout,
         }),
     ],
 });
